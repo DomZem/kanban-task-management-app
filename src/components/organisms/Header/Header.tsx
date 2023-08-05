@@ -8,18 +8,26 @@ const Header = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
 
   return (
-    <header className="flex items-center justify-between bg-primaryDarkGrey px-4">
-      <section className="flex items-center">
-        {!tabletMatches && <img className="mr-4" src={logoImage} alt="logo" />}
+    <header className="flex items-center justify-between border-primaryLinesDark bg-primaryDarkGrey px-4 md:border-b-[1px]">
+      <section className="flex h-full">
+        {tabletMatches ? (
+          <div className="flex h-full w-60 items-center border-r-[1px] border-primaryLinesDark">
+            <img className="mr-4" src={logoImage} alt="logo" />
 
-        <h1 className="text-lg font-medium text-primaryWhite">
-          Platform lunch
-        </h1>
+            <h1 className="text-2xl font-bold text-primaryWhite">kanban</h1>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <img className="mr-4" src={logoImage} alt="logo" />
 
-        {!tabletMatches && (
-          <button>
-            <MdKeyboardArrowDown className="p-1 text-3xl text-primaryPurple" />
-          </button>
+            <h2 className="text-lg font-medium text-primaryWhite">
+              Platform lunch
+            </h2>
+
+            <button>
+              <MdKeyboardArrowDown className="p-1 text-3xl text-primaryPurple" />
+            </button>
+          </div>
         )}
       </section>
 
