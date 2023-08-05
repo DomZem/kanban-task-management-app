@@ -8,9 +8,9 @@ const App = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
 
   return (
-    <div className="grid h-screen grid-rows-[64px_1fr] md:grid-rows-[80px_1fr] lg:grid-rows-[97px_1fr]">
+    <div className="grid h-screen grid-rows-[64px_1fr] overflow-hidden md:grid-rows-[80px_1fr] lg:grid-rows-[97px_1fr]">
       <Header />
-      <div className="flex">
+      <div className="flex overflow-hidden">
         {tabletMatches && <DesktopSidebar />}
         <main className="flex h-full w-full flex-1 items-center justify-center bg-primaryVeryDarkGrey p-4 text-primaryMediumGrey">
           <div className="flex flex-col items-center gap-y-6">

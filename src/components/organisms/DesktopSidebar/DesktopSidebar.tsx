@@ -1,9 +1,16 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
+import { boardAdded } from '@/store/slices/boardsSlice';
+import { transformToKebabCase } from '@/utility';
 import { useState } from 'react';
 import { IoMdEye, IoMdEyeOff, IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { TbLayoutBoardSplit } from 'react-icons/tb';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const DesktopSidebar = () => {
   const [isActive, setIsActive] = useState(false);
+  const boards = useAppSelector((state) => state.boards);
+  const dispatch = useAppDispatch();
+  const { pathname } = useLocation();
 
   return (
     <aside
@@ -11,27 +18,36 @@ const DesktopSidebar = () => {
         isActive ? 'w-64' : 'w-0'
       }`}
     >
-      <section className="mt-8">
-        <h3 className="mb-5 ml-6 text-xs font-bold uppercase tracking-[2.4px] text-primaryMediumGrey">
-          all boards (3)
+      <section className="flex flex-col overflow-hidden">
+        <h3 className="mb-5 ml-6 mt-5 text-xs font-bold uppercase tracking-[2.4px] text-primaryMediumGrey">
+          all boards ({boards.length})
         </h3>
-        <nav>
-          <ul>
-            <li className="flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 hover:bg-primaryPurple hover:text-primaryWhite">
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden">
+          {boards.map(({ name }) => (
+            <NavLink
+              className={`flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 ${
+                pathname.substring(1) === transformToKebabCase(name) &&
+                'bg-primaryPurple text-primaryWhite'
+              }`}
+              to={transformToKebabCase(name)}
+              key={name}
+            >
               <TbLayoutBoardSplit className="text-xl" />
-              <p className="ml-3">Platofrm Launch</p>
-            </li>
-            <li className="flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 hover:bg-primaryPurple hover:text-primaryWhite">
-              <TbLayoutBoardSplit className="text-xl" />
-              <p className="ml-3">Marketing Plan</p>
-            </li>
-            <li className="flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 hover:bg-primaryPurple hover:text-primaryWhite">
-              <TbLayoutBoardSplit className="text-xl" />
-              <p className="ml-3">Roadmap</p>
-            </li>
-          </ul>
+              <p className="ml-3">{name}</p>
+            </NavLink>
+          ))}
         </nav>
-        <button className="flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryPurple duration-200">
+        <button
+          className="flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryPurple duration-200"
+          onClick={() =>
+            dispatch(
+              boardAdded({
+                name: 'Random board',
+                columns: [],
+              })
+            )
+          }
+        >
           <TbLayoutBoardSplit className="text-xl" />
           <p className="ml-3">+ Create New Board</p>
         </button>
