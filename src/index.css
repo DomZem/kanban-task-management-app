@@ -5,6 +5,8 @@
 :root {
   --primaryPurple: #635fc7;
   --primaryPurpleHover: #a8a4ff;
+  --primaryLightPurple: #635fc71a;
+  --primaryLightPurpleHover: #635fc740;
   --primaryBlack: #000112;
   --primaryVeryDarkGrey: #20212c;
   --primaryDarkGrey: #2b2c37;
@@ -25,5 +27,11 @@
 
   img {
     max-width: 100%;
+  }
+}
+
+@layer components {
+  .label {
+    @apply text-xs font-bold text-primaryMediumGrey;
   }
 }

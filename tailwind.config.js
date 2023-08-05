@@ -6,6 +6,8 @@ export default {
       colors: {
         primaryPurple: 'var(--primaryPurple)',
         primaryPurpleHover: 'var(--primaryPurpleHover)',
+        primaryLightPurple: 'var(--primaryLightPurple)',
+        primaryLightPurpleHover: 'var(--primaryLightPurpleHover)',
         primaryBlack: 'var(--primaryBlack)',
         primaryDarkGrey: 'var(--primaryDarkGrey)',
         primaryLinesDark: 'var(--primaryLinesDark)',
