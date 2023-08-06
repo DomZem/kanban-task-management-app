@@ -17,8 +17,8 @@ const DesktopSidebar = () => {
   return (
     <>
       <aside
-        className={`flex flex-col justify-between border-r-[1px] border-primaryLinesDark bg-primaryDarkGrey duration-200 ${
-          isActive ? 'w-64' : 'w-0'
+        className={`flex flex-col justify-between border-primaryLinesDark bg-primaryDarkGrey duration-200 ${
+          isActive ? 'w-64 border-r-[1px]' : 'w-0'
         }`}
       >
         <section className="flex flex-col overflow-hidden">
