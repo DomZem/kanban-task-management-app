@@ -1,20 +1,8 @@
+import { board } from '@/data';
 import { type IBoard } from '@/types';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: IBoard[] = [
-  {
-    name: 'Platform Launch',
-    columns: ['Todo', 'Doing'],
-  },
-  {
-    name: 'Marketing Plan',
-    columns: ['Todo', 'Finished'],
-  },
-  {
-    name: 'Roadmap',
-    columns: ['Todo', 'Done'],
-  },
-];
+const initialState: IBoard[] = [board];
 
 export const boardsSlice = createSlice({
   name: 'boards',
