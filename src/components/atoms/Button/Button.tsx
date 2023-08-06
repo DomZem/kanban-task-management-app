@@ -1,17 +1,22 @@
-import { type FC } from 'react';
+import { type ButtonHTMLAttributes, type FC } from 'react';
 
-interface ButtonProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  type?: 'primary' | 'secondary' | 'destructive';
+  version?: 'primary' | 'secondary' | 'destructive';
 }
 
-const Button: FC<ButtonProps> = ({ children, type = 'primary' }) => (
+const Button: FC<ButtonProps> = ({
+  version = 'primary',
+  children,
+  ...props
+}) => (
   <button
     className={`${
-      type === 'primary'
+      version === 'primary'
         ? 'bg-primaryPurple hover:bg-primaryPurpleHover'
         : 'bg-primaryRed hover:bg-primaryRedHover'
     } flex items-center gap-x-1 rounded-3xl px-5 py-3 font-medium text-primaryWhite duration-200`}
+    {...props}
   >
     {children}
   </button>
