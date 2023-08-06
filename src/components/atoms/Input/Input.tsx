@@ -10,7 +10,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         ref={ref}
-        className={`rounded border border-primaryMediumGrey px-4 py-2 font-medium outline-none ${className}`}
+        className={`rounded border border-primaryBorder px-4 py-2 font-medium outline-none ${className}`}
         {...props}
       />
     );

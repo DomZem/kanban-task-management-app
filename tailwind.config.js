@@ -18,6 +18,7 @@ export default {
         primaryRed: 'var(--primaryRed)',
         primaryRedHover: 'var(--primaryRedHover)',
         primaryVeryDarkGrey: 'var(--primaryVeryDarkGrey)',
+        primaryBorder: 'var(--primaryBorder)',
       },
     },
   },

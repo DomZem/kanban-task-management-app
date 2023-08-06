@@ -17,6 +17,7 @@
   --primaryWhite: #ffffff;
   --primaryRed: #ea5555;
   --primaryRedHover: #ff9898;
+  --primaryBorder: #828fa340;
 }
 
 @layer base {
