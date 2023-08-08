@@ -16,9 +16,15 @@ const App = () => {
     state.boards.find((board) => board.name === transformToPascalCase(pathname))
   );
 
-  const columns = board?.columns;
+  if (!board) return;
 
-  const tasks = board?.tasks;
+  const columns = board.columns;
+
+  const tasks = useAppSelector((state) =>
+    state.tasks.filter((task) => task.boardID === board.boardID)
+  );
+
+  const subtasks = useAppSelector((state) => state.subtasks);
 
   return (
     <div className="grid h-screen grid-rows-[64px_1fr] overflow-hidden md:grid-rows-[80px_1fr] lg:grid-rows-[97px_1fr]">
@@ -26,7 +32,7 @@ const App = () => {
       <div className="flex overflow-hidden">
         {tabletMatches && <DesktopSidebar />}
         <main className="flex h-full w-full flex-1 items-center justify-center overflow-y-auto bg-primaryVeryDarkGrey p-4 text-primaryMediumGrey">
-          {columns && tasks ? (
+          {columns ? (
             <div className="h-full w-full flex-1">
               <ul className="flex h-full justify-start gap-x-6">
                 {columns.map((column) => (
@@ -41,6 +47,10 @@ const App = () => {
                       <ul className="mt-6 flex flex-col gap-y-5">
                         {tasks.map((task, index) => {
                           if (task.status === column) {
+                            const subtasksArr = subtasks.filter(
+                              (subtask) => subtask.taskID === task.taskID
+                            );
+
                             return (
                               <li
                                 key={index}
@@ -51,11 +61,11 @@ const App = () => {
                                 </h4>
                                 <p className="text-xs font-bold text-primaryMediumGrey">
                                   {
-                                    task.subtasks.filter(
+                                    subtasksArr.filter(
                                       (subtask) => subtask.isComplete
                                     ).length
                                   }{' '}
-                                  of {task.subtasks.length} substasks
+                                  of {subtasksArr.length} substasks
                                 </p>
                               </li>
                             );

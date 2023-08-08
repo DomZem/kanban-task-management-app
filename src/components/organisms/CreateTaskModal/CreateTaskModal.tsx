@@ -3,9 +3,12 @@ import PrimaryButton from '@/components/atoms/PrimaryButton/PrimaryButton';
 import Select from '@/components/atoms/Select/Select';
 import Textarea from '@/components/atoms/Textarea/Textarea';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
-import { useAppSelector } from '@/hooks/storeHook';
+import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
+import { subtaskAdded } from '@/store/slices/subtasksSlice';
+import { taskAdded } from '@/store/slices/tasksSlice';
 import { transformToPascalCase } from '@/utility';
 import { Dialog } from '@headlessui/react';
+import { nanoid } from '@reduxjs/toolkit';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
@@ -14,25 +17,27 @@ interface NewBoardFormValues {
   title: string;
   description: string;
   subtasks: Array<{ title: string }>;
-  status: string;
 }
 
 const CreateTaskModal = () => {
+  const dispatch = useAppDispatch();
   const { pathname } = useLocation();
-  const options = useAppSelector(
-    (state) =>
-      state.boards.find(
-        (board) => board.name === transformToPascalCase(pathname)
-      )?.columns
+
+  const board = useAppSelector((state) =>
+    state.boards.find((board) => board.name === transformToPascalCase(pathname))
   );
 
-  const [selected, setSelected] = useState(options[0]);
+  if (!board) return;
+
+  const columns = board.columns;
+
+  const [selectedStatus, setSelectedStatus] = useState(columns[0]);
 
   const { register, control, handleSubmit } = useForm<NewBoardFormValues>({
     defaultValues: {
       title: '',
       description: '',
-      subtasks: [{ title: '' }, { title: '' }],
+      subtasks: [{ title: '' }],
     },
   });
 
@@ -41,9 +46,19 @@ const CreateTaskModal = () => {
     control,
   });
 
-  // Send data to store
-  const onSubmit = (data: NewBoardFormValues) => {
-    console.log(data);
+  const onSubmit = ({ title, description, subtasks }: NewBoardFormValues) => {
+    // We need to create taskID there, because next we will be use it to create subtask. That's why we don't create taskID inside reducer.
+    const taskID = nanoid();
+
+    // Send task to store
+    dispatch(
+      taskAdded(taskID, title, description, selectedStatus, board.boardID)
+    );
+
+    // Send subtasks to store
+    subtasks.forEach(({ title }) => {
+      dispatch(subtaskAdded(title, taskID));
+    });
   };
 
   return (
@@ -100,9 +115,9 @@ const CreateTaskModal = () => {
           Status
         </label>
         <Select
-          options={options ?? ['Todo']}
-          selected={selected}
-          onChange={setSelected}
+          options={columns}
+          selected={selectedStatus}
+          onChange={setSelectedStatus}
         />
       </section>
 

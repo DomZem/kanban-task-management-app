@@ -1,15 +1,31 @@
-import { board } from '@/data';
 import { type IBoard } from '@/types';
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: IBoard[] = [board];
+const initialState: IBoard[] = [
+  {
+    boardID: 'I8xa1o7b8GYYMuSUhDxMG',
+    name: 'Platform Launch',
+    columns: ['Todo', 'Doing', 'Done'],
+  },
+];
 
 export const boardsSlice = createSlice({
   name: 'boards',
   initialState,
   reducers: {
-    boardAdded: (state, action: PayloadAction<IBoard>) => {
-      state.push(action.payload);
+    boardAdded: {
+      reducer(state, action: PayloadAction<IBoard>) {
+        state.push(action.payload);
+      },
+      prepare(name: string, columns: string[]) {
+        return {
+          payload: {
+            boardID: nanoid(),
+            name,
+            columns,
+          },
+        };
+      },
     },
   },
 });

@@ -1,19 +1,22 @@
 export interface IBoard {
+  boardID: string;
   name: string;
   columns: IStatus[];
-  tasks: ITask[];
 }
 
 export interface ITask {
-  status: IStatus;
+  taskID: string;
   title: string;
   description: string;
-  subtasks: ISubtask[];
+  status: IStatus;
+  boardID: string;
 }
 
 export interface ISubtask {
+  subtaskID: string;
   title: string;
   isComplete: boolean;
+  taskID: string;
 }
 
 export type IStatus = string;

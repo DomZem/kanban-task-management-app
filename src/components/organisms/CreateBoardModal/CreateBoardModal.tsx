@@ -30,7 +30,7 @@ const CreateBoardModal = () => {
   const onSubmit = (data: NewBoardFormValues) => {
     const columns: string[] = [];
     data.columns.forEach((column) => columns.push(column.title));
-    dispatch(boardAdded({ name: data.title, columns }));
+    dispatch(boardAdded(data.title, columns));
   };
 
   return (
