@@ -6,12 +6,24 @@ interface SelectProps {
   options: string[];
   selected: string;
   onChange: (value: React.SetStateAction<string>) => void;
+  onCustomAction?: () => void;
 }
 
-const Select: FC<SelectProps> = ({ options, selected, onChange }) => {
+const Select: FC<SelectProps> = ({
+  options,
+  selected,
+  onChange,
+  onCustomAction,
+}) => {
+  const handleSelectChange = (value: string) => {
+    onChange(value);
+    onCustomAction?.();
+    console.log('Wykonałem się!');
+  };
+
   return (
     <div>
-      <Listbox value={selected} onChange={onChange}>
+      <Listbox value={selected} onChange={handleSelectChange}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-pointer rounded border border-primaryBorder bg-white py-2 pl-3 pr-10 text-left focus:outline-none">
             <span className="block truncate">{selected}</span>

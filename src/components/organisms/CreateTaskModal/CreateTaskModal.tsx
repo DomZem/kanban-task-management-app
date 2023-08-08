@@ -27,7 +27,9 @@ const CreateTaskModal = () => {
     state.boards.find((board) => board.name === transformToPascalCase(pathname))
   );
 
-  if (!board) return;
+  if (!board) {
+    return <div>Invalid Board</div>;
+  }
 
   const columns = board.columns;
 

@@ -32,9 +32,19 @@ export const tasksSlice = createSlice({
         };
       },
     },
+    taskStatusUpdated: (
+      state,
+      action: PayloadAction<{ taskID: string; status: string }>
+    ) => {
+      const { taskID, status } = action.payload;
+      const existingTask = state.find((task) => task.taskID === taskID);
+      if (existingTask) {
+        existingTask.status = status;
+      }
+    },
   },
 });
 
-export const { taskAdded } = tasksSlice.actions;
+export const { taskAdded, taskStatusUpdated } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

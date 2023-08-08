@@ -17,7 +17,7 @@ const initialState: ISubtask[] = [
   {
     subtaskID: nanoid(),
     title: 'Outline a business model that works for our solution',
-    isComplete: false,
+    isComplete: true,
     taskID: 'CwWTu6kUaL3CN3wHcmZlg',
   },
 ];
@@ -41,9 +41,22 @@ export const subtasksSlice = createSlice({
         };
       },
     },
+    subtaskCompleteStatusUpdated: (
+      state,
+      action: PayloadAction<{ subtaskID: string; isComplete: boolean }>
+    ) => {
+      const { subtaskID, isComplete } = action.payload;
+      const existingSubtask = state.find(
+        (subtask) => subtask.subtaskID === subtaskID
+      );
+      if (existingSubtask) {
+        existingSubtask.isComplete = isComplete;
+      }
+    },
   },
 });
 
-export const { subtaskAdded } = subtasksSlice.actions;
+export const { subtaskAdded, subtaskCompleteStatusUpdated } =
+  subtasksSlice.actions;
 
 export default subtasksSlice.reducer;
