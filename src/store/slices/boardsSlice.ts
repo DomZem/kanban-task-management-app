@@ -7,6 +7,16 @@ const initialState: IBoard[] = [
     name: 'Platform Launch',
     columns: ['Todo', 'Doing', 'Done'],
   },
+  {
+    boardID: 'puUXSY2J7yE5EjkBPk335',
+    name: 'Marketing Plan',
+    columns: ['Todo', 'Done'],
+  },
+  {
+    boardID: 'NN8M25A1URsnCR9alMzAf',
+    name: 'Roadmap',
+    columns: ['Inspiration', 'Plan', 'Work', 'Done'],
+  },
 ];
 
 export const boardsSlice = createSlice({

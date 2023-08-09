@@ -4,6 +4,7 @@ import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemov
 import { useAppDispatch } from '@/hooks/storeHook';
 import { boardAdded } from '@/store/slices/boardsSlice';
 import { Dialog } from '@headlessui/react';
+import { nanoid } from '@reduxjs/toolkit';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 interface NewBoardFormValues {
@@ -31,6 +32,7 @@ const CreateBoardModal = () => {
     const columns: string[] = [];
     data.columns.forEach((column) => columns.push(column.title));
     dispatch(boardAdded(data.title, columns));
+    console.log(nanoid());
   };
 
   return (
