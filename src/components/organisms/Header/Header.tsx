@@ -1,10 +1,12 @@
 import logoImage from '@/assets/logo.png';
 import Button from '@/components/atoms/Button/Button';
+import ElapsisMenu, {
+  type ElipsisMenuItem,
+} from '@/components/molecules/ElapsisMenu/ElapsisMenu';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { transformToPascalCase } from '@/utility';
-import { HiDotsVertical } from 'react-icons/hi';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import CreateTaskModal from '../CreateTaskModal/CreateTaskModal';
@@ -13,6 +15,18 @@ const Header = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
   const { pathname } = useLocation();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
+
+  const elipsisMenuList: ElipsisMenuItem[] = [
+    {
+      name: 'Edit Board',
+      action: () => console.log('Edit board modal'),
+    },
+    {
+      name: 'Delete Board',
+      action: () => console.log('Delete board modal'),
+      version: 'red',
+    },
+  ];
 
   return (
     <>
@@ -52,9 +66,7 @@ const Header = () => {
             </Button>
           )}
 
-          <button>
-            <HiDotsVertical className="text-xl text-primaryMediumGrey" />
-          </button>
+          <ElapsisMenu items={elipsisMenuList} />
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>

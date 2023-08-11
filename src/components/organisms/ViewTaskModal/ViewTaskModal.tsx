@@ -1,10 +1,12 @@
 import Select from '@/components/atoms/Select/Select';
+import ElapsisMenu, {
+  type ElipsisMenuItem,
+} from '@/components/molecules/ElapsisMenu/ElapsisMenu';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { subtaskCompleteStatusUpdated } from '@/store/slices/subtasksSlice';
 import { taskStatusUpdated } from '@/store/slices/tasksSlice';
 import { Dialog } from '@headlessui/react';
 import { useState, type FC } from 'react';
-import { HiDotsVertical } from 'react-icons/hi';
 
 interface ViewTaskModalProps {
   taskID: string;
@@ -45,6 +47,18 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({ taskID }) => {
     dispatch(subtaskCompleteStatusUpdated({ subtaskID, isComplete }));
   };
 
+  const elipsisMenuList: ElipsisMenuItem[] = [
+    {
+      name: 'Edit Task',
+      action: () => console.log('Edit task modal'),
+    },
+    {
+      name: 'Delete Task',
+      action: () => console.log('Delete task modal'),
+      version: 'red',
+    },
+  ];
+
   return (
     <Dialog.Panel className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey">
       <section className="flex items-center">
@@ -54,9 +68,7 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({ taskID }) => {
         >
           {task.title}
         </Dialog.Title>
-        <button className="p-2">
-          <HiDotsVertical className="text-xl text-primaryMediumGrey" />
-        </button>
+        <ElapsisMenu items={elipsisMenuList} />
       </section>
 
       <Dialog.Description
