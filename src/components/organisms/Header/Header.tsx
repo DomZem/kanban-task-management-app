@@ -16,19 +16,21 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between border-primaryLinesDark bg-primaryDarkGrey px-4 md:border-b-[1px]">
+      <header className="flex items-center justify-between border-primaryLinesLight bg-primaryWhite px-4 dark:border-primaryLinesDark dark:bg-primaryDarkGrey">
         <section className="flex h-full">
           {tabletMatches && (
-            <div className="flex h-full w-60 items-center border-r-[1px] border-primaryLinesDark">
+            <div className="flex h-full w-60 items-center border-r-[1px] border-primaryLinesLight dark:border-primaryLinesDark">
               <img className="mr-4" src={logoImage} alt="logo" />
 
-              <h1 className="text-2xl font-bold text-primaryWhite">kanban</h1>
+              <h1 className="text-2xl font-bold text-primaryBlack dark:text-primaryWhite">
+                kanban
+              </h1>
             </div>
           )}
           <div className="flex items-center">
             <img className="mr-4 md:hidden" src={logoImage} alt="logo" />
 
-            <h2 className="text-lg font-bold text-primaryWhite md:ml-6 md:text-xl">
+            <h2 className="text-lg font-bold text-primaryBlack dark:text-primaryWhite md:ml-6 md:text-xl">
               {transformToPascalCase(pathname)}
             </h2>
 

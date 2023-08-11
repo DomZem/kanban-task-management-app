@@ -16,7 +16,7 @@ const InputRemoveField = React.forwardRef<
       <Input ref={ref} className="flex-1" {...props} />
 
       <button className="p-2 pr-0" type="button" onClick={onRemove}>
-        <MdClose className="text-2xl text-primaryMediumGrey" />
+        <MdClose className="text-2xl text-primaryMediumGrey duration-200 hover:text-primaryRed" />
       </button>
     </div>
   );

@@ -39,9 +39,11 @@ const CreateBoardModal = () => {
     <Dialog.Panel
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6"
+      className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
     >
-      <Dialog.Title className="text-lg font-bold">Add New Board</Dialog.Title>
+      <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
+        Add New Board
+      </Dialog.Title>
 
       <section>
         <div className="flex flex-col gap-y-2">

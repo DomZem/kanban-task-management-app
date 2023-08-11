@@ -1,6 +1,8 @@
+import Toggle from '@/components/atoms/Toggle/Toggle';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import { useAppSelector } from '@/hooks/storeHook';
+import useDarkMode from '@/hooks/useDarkMode';
 import { transformToKebabCase } from '@/utility';
 import { useState } from 'react';
 import { IoMdEye, IoMdEyeOff, IoMdMoon, IoMdSunny } from 'react-icons/io';
@@ -14,10 +16,12 @@ const DesktopSidebar = () => {
   const { pathname } = useLocation();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
+  const toggleMode = useDarkMode();
+
   return (
     <>
       <aside
-        className={`flex flex-col justify-between border-primaryLinesDark bg-primaryDarkGrey duration-200 ${
+        className={`flex flex-col justify-between border-primaryLinesLight bg-primaryWhite transition-[width] duration-200 dark:border-primaryLinesDark dark:bg-primaryDarkGrey ${
           isActive ? 'w-64 border-r-[1px]' : 'w-0'
         }`}
       >
@@ -28,9 +32,10 @@ const DesktopSidebar = () => {
           <nav className="flex-1 overflow-y-auto overflow-x-hidden">
             {boards.map(({ name }) => (
               <NavLink
-                className={`flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 ${
-                  pathname.substring(1) === transformToKebabCase(name) &&
-                  'bg-primaryPurple text-primaryWhite'
+                className={`flex w-60 cursor-pointer items-center rounded-r-[100px] bg-opacity-10 px-6 py-4 font-bold text-primaryMediumGrey duration-200 ${
+                  pathname.substring(1) === transformToKebabCase(name)
+                    ? 'bg-primaryPurple text-primaryWhite'
+                    : 'hover:bg-[#635FC7]/10 hover:text-primaryPurple hover:dark:bg-primaryWhite'
                 }`}
                 to={transformToKebabCase(name)}
                 key={name}
@@ -50,15 +55,17 @@ const DesktopSidebar = () => {
         </section>
         <section>
           <div>{/* User photo | firstName LastName | Logout icon */}</div>
-          <div className="ml-3 mr-3 flex items-center justify-center rounded-md bg-primaryVeryDarkGrey py-3">
+          <div className="ml-3 mr-3 flex items-center justify-center rounded-md bg-primaryLightGrey py-3 dark:bg-primaryVeryDarkGrey">
             <div className="flex items-center gap-x-4">
               <IoMdSunny className="text-xl text-primaryMediumGrey" />
-              {/* Toggle Swithc */}
+
+              <Toggle onChange={toggleMode} />
+
               <IoMdMoon className="text-xl text-primaryMediumGrey" />
             </div>
           </div>
           <button
-            className="mb-8 mt-8 flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 hover:bg-primaryVeryDarkGrey hover:text-primaryWhite"
+            className="mb-8 mt-8 flex w-60 cursor-pointer items-center rounded-r-[100px] px-6 py-4 font-bold text-primaryMediumGrey duration-200 hover:bg-[#635FC7]/10 hover:text-primaryPurple hover:dark:bg-primaryWhite"
             onClick={() => setIsActive(false)}
           >
             <IoMdEyeOff className="text-xl" />

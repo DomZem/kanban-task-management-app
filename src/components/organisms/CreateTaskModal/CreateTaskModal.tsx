@@ -67,9 +67,11 @@ const CreateTaskModal = () => {
     <Dialog.Panel
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6"
+      className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
     >
-      <Dialog.Title className="text-lg font-bold">Add New Task</Dialog.Title>
+      <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
+        Add New Task
+      </Dialog.Title>
 
       <section className="flex flex-col gap-y-2">
         <label className="label" htmlFor="title">

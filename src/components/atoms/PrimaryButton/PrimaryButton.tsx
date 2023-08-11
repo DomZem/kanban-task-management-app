@@ -14,7 +14,7 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
     className={` ${
       version === 'Purple'
         ? 'bg-primaryPurple text-primaryWhite hover:bg-primaryPurpleHover'
-        : 'hover:bg-primaryLightPurpleHover bg-primaryLightPurple text-primaryPurple'
+        : 'bg-primaryLightPurple text-primaryPurple hover:bg-primaryLightPurpleHover dark:bg-primaryWhite'
     } rounded-[20px]  p-2 text-sm font-bold leading-6 duration-200`}
     {...props}
   >

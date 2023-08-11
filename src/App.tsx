@@ -38,7 +38,7 @@ const App = () => {
         <Header />
         <div className="flex overflow-hidden">
           {tabletMatches && <DesktopSidebar />}
-          <main className="flex h-full w-full flex-1 items-center justify-center overflow-y-auto bg-primaryVeryDarkGrey p-4 text-primaryMediumGrey">
+          <main className="flex h-full w-full flex-1 items-center justify-center overflow-y-auto bg-primaryLightGrey p-4 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
             {columns ? (
               <div className="h-full w-full flex-1">
                 <ul className="flex h-full justify-start gap-x-6">
@@ -61,13 +61,13 @@ const App = () => {
                               return (
                                 <li
                                   key={index}
-                                  className="cursor-pointer rounded-lg bg-primaryDarkGrey px-4 py-6"
+                                  className="cursor-pointer rounded-lg bg-primaryWhite px-4 py-6 shadow-task dark:bg-primaryDarkGrey"
                                   onClick={() => {
                                     setTaskID(task.taskID);
                                     handleOpenModal();
                                   }}
                                 >
-                                  <h4 className="mb-2 break-words text-base font-bold text-primaryWhite">
+                                  <h4 className="mb-2 break-words text-base font-bold text-primaryBlack dark:text-primaryWhite">
                                     {task.title}
                                   </h4>
                                   <p className="text-xs font-bold text-primaryMediumGrey">

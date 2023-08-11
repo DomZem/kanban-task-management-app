@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -19,6 +20,9 @@ export default {
         primaryRedHover: 'var(--primaryRedHover)',
         primaryVeryDarkGrey: 'var(--primaryVeryDarkGrey)',
         primaryBorder: 'var(--primaryBorder)',
+      },
+      boxShadow: {
+        task: '0px 4px 6px 0px rgba(54, 78, 126, 0.10);',
       },
     },
   },

@@ -33,6 +33,6 @@
 
 @layer components {
   .label {
-    @apply text-xs font-bold text-primaryMediumGrey;
+    @apply text-xs font-bold text-primaryMediumGrey dark:text-primaryWhite;
   }
 }
