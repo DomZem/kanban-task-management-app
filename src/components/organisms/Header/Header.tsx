@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import CreateTaskModal from '../CreateTaskModal/CreateTaskModal';
-import DeleteBoardModal from '../DeleteModal/DeleteBoardModal';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 type ModalType = 'delete-board' | 'create-task';
 
@@ -92,7 +92,7 @@ const Header = () => {
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
         {currentModal === 'create-task' && <CreateTaskModal />}
         {currentModal === 'delete-board' && (
-          <DeleteBoardModal
+          <DeleteModal
             title="Delete this board?"
             description={deleteBoardDescription}
             onDelete={() => dispatch(boardDeleted({ boardName }))}

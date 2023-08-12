@@ -32,9 +32,18 @@ export const tasksSlice = createSlice({
         existingTask.status = status;
       }
     },
+    taskDeleted: (state, action: PayloadAction<{ taskID: string }>) => {
+      const { taskID } = action.payload;
+
+      const indexToRemove = state.findIndex((task) => task.taskID === taskID);
+
+      if (indexToRemove !== -1) {
+        state.splice(indexToRemove, 1);
+      }
+    },
   },
 });
 
-export const { taskAdded, taskStatusUpdated } = tasksSlice.actions;
+export const { taskAdded, taskStatusUpdated, taskDeleted } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

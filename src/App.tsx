@@ -3,13 +3,15 @@ import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import Button from './components/atoms/Button/Button';
+import DeleteModal from './components/organisms/DeleteModal/DeleteModal';
 import DesktopSidebar from './components/organisms/DesktopSidebar/DesktopSidebar';
 import Header from './components/organisms/Header/Header';
 import ViewTaskModal from './components/organisms/ViewTaskModal/ViewTaskModal';
 import Modal from './components/templates/Modal/Modal';
 import useModal from './components/templates/Modal/useModal';
-import { useAppSelector } from './hooks/storeHook';
+import { useAppDispatch, useAppSelector } from './hooks/storeHook';
 import useMediaQuery from './hooks/useMediaQuery';
+import { taskDeleted } from './store/slices/tasksSlice';
 import { transformToPascalCase } from './utility';
 
 const App = () => {
@@ -17,6 +19,8 @@ const App = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
   const { pathname } = useLocation();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
+  const [isTaskToDelete, setIsTaskToDelete] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
     state.boards.find((board) => board.name === transformToPascalCase(pathname))
@@ -31,6 +35,8 @@ const App = () => {
   );
 
   const subtasks = useAppSelector((state) => state.subtasks);
+
+  const taskName = tasks.find((task) => task.taskID === taskID)?.title;
 
   return (
     <>
@@ -103,7 +109,26 @@ const App = () => {
         </div>
       </div>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        <ViewTaskModal taskID={taskID} />
+        {!isTaskToDelete ? (
+          <ViewTaskModal
+            taskID={taskID}
+            action={() => setIsTaskToDelete(true)}
+          />
+        ) : (
+          <DeleteModal
+            title="Delete this task?"
+            description={`Are you sure you want to delete the ‘${taskName}’ task and its subtasks? This action cannot be reversed.`}
+            onDelete={() => {
+              dispatch(taskDeleted({ taskID }));
+              setIsTaskToDelete(false);
+              handleCloseModal();
+            }}
+            onCancel={() => {
+              handleCloseModal();
+              setIsTaskToDelete(false);
+            }}
+          />
+        )}
       </Modal>
     </>
   );
