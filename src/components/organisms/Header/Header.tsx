@@ -5,16 +5,25 @@ import ElapsisMenu, {
 } from '@/components/molecules/ElapsisMenu/ElapsisMenu';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
+import { useAppDispatch } from '@/hooks/storeHook';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { boardDeleted } from '@/store/slices/boardsSlice';
 import { transformToPascalCase } from '@/utility';
+import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import CreateTaskModal from '../CreateTaskModal/CreateTaskModal';
+import DeleteBoardModal from '../DeleteModal/DeleteBoardModal';
+
+type ModalType = 'delete-board' | 'create-task';
 
 const Header = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
   const { pathname } = useLocation();
+  const boardName = transformToPascalCase(pathname);
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
+  const [currentModal, setCurrentModal] = useState<ModalType>('create-task');
+  const dispatch = useAppDispatch();
 
   const elipsisMenuList: ElipsisMenuItem[] = [
     {
@@ -23,10 +32,21 @@ const Header = () => {
     },
     {
       name: 'Delete Board',
-      action: () => console.log('Delete board modal'),
+      action: () => openModal('delete-board'),
       version: 'red',
     },
   ];
+
+  const openModal = (modalType: ModalType) => {
+    if (modalType === 'create-task') {
+      setCurrentModal('create-task');
+    } else if (modalType === 'delete-board') {
+      setCurrentModal('delete-board');
+    }
+    handleOpenModal();
+  };
+
+  const deleteBoardDescription = `Are you sure you want to delete the ‘${boardName}’ board? This action will remove all columns and tasks and cannot be reversed.`;
 
   return (
     <>
@@ -45,7 +65,7 @@ const Header = () => {
             <img className="mr-4 md:hidden" src={logoImage} alt="logo" />
 
             <h2 className="text-lg font-bold text-primaryBlack dark:text-primaryWhite md:ml-6 md:text-xl">
-              {transformToPascalCase(pathname)}
+              {boardName}
             </h2>
 
             <button className="md:hidden">
@@ -60,7 +80,7 @@ const Header = () => {
               <MdAdd className="text-xl text-primaryWhite" />
             </button>
           ) : (
-            <Button onClick={handleOpenModal}>
+            <Button onClick={() => openModal('create-task')}>
               <MdAdd className="text-xl text-primaryWhite" />
               Add New Task
             </Button>
@@ -70,7 +90,15 @@ const Header = () => {
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        <CreateTaskModal />
+        {currentModal === 'create-task' && <CreateTaskModal />}
+        {currentModal === 'delete-board' && (
+          <DeleteBoardModal
+            title="Delete this board?"
+            description={deleteBoardDescription}
+            onDelete={() => dispatch(boardDeleted({ boardName }))}
+            onCancel={handleCloseModal}
+          />
+        )}
       </Modal>
     </>
   );
