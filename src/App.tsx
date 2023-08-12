@@ -6,6 +6,7 @@ import Button from './components/atoms/Button/Button';
 import DeleteModal from './components/organisms/DeleteModal/DeleteModal';
 import DesktopSidebar from './components/organisms/DesktopSidebar/DesktopSidebar';
 import Header from './components/organisms/Header/Header';
+import TaskList from './components/organisms/TaskList/TaskList';
 import ViewTaskModal from './components/organisms/ViewTaskModal/ViewTaskModal';
 import Modal from './components/templates/Modal/Modal';
 import useModal from './components/templates/Modal/useModal';
@@ -57,38 +58,13 @@ const App = () => {
                         </h3>
                       </div>
                       {tasks && (
-                        <ul className="mt-6 flex flex-col gap-y-5">
-                          {tasks.map((task, index) => {
-                            if (task.status === column) {
-                              const subtasksArr = subtasks.filter(
-                                (subtask) => subtask.taskID === task.taskID
-                              );
-
-                              return (
-                                <li
-                                  key={index}
-                                  className="cursor-pointer rounded-lg bg-primaryWhite px-4 py-6 shadow-task dark:bg-primaryDarkGrey"
-                                  onClick={() => {
-                                    setTaskID(task.taskID);
-                                    handleOpenModal();
-                                  }}
-                                >
-                                  <h4 className="mb-2 break-words text-base font-bold text-primaryBlack dark:text-primaryWhite">
-                                    {task.title}
-                                  </h4>
-                                  <p className="text-xs font-bold text-primaryMediumGrey">
-                                    {
-                                      subtasksArr.filter(
-                                        (subtask) => subtask.isComplete
-                                      ).length
-                                    }{' '}
-                                    of {subtasksArr.length} substasks
-                                  </p>
-                                </li>
-                              );
-                            }
-                          })}
-                        </ul>
+                        <TaskList
+                          tasks={tasks}
+                          subtasks={subtasks}
+                          column={column}
+                          onSetTaskID={setTaskID}
+                          onOpenModal={handleOpenModal}
+                        />
                       )}
                     </li>
                   ))}

@@ -15,7 +15,6 @@ interface ViewTaskModalProps {
 
 const ViewTaskModal: FC<ViewTaskModalProps> = ({ taskID, action }) => {
   const dispatch = useAppDispatch();
-  // const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
   const task = useAppSelector((state) =>
     state.tasks.find((task) => task.taskID === taskID)
@@ -60,8 +59,6 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({ taskID, action }) => {
       version: 'red',
     },
   ];
-
-  // const deleteTaskDescription = `Are you sure you want to delete the ‘Build settings UI’ task and its subtasks? This action cannot be reversed.`;
 
   return (
     <>
