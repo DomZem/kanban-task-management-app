@@ -1,7 +1,7 @@
 import Select from '@/components/atoms/Select/Select';
-import ElapsisMenu, {
-  type ElipsisMenuItem,
-} from '@/components/molecules/ElapsisMenu/ElapsisMenu';
+import EllipsisMenu, {
+  type EllipsisMenuItem,
+} from '@/components/molecules/EllipsisMenu/EllipsisMenu';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { subtaskCompleteStatusUpdated } from '@/store/slices/subtasksSlice';
 import { taskStatusUpdated } from '@/store/slices/tasksSlice';
@@ -48,7 +48,7 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({ taskID, action }) => {
     dispatch(subtaskCompleteStatusUpdated({ subtaskID, isComplete }));
   };
 
-  const elipsisMenuList: ElipsisMenuItem[] = [
+  const ellipsisMenuList: EllipsisMenuItem[] = [
     {
       name: 'Edit Task',
       action: () => console.log('Edit task modal'),
@@ -70,7 +70,8 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({ taskID, action }) => {
           >
             {task.title}
           </Dialog.Title>
-          <ElapsisMenu items={elipsisMenuList} />
+
+          <EllipsisMenu items={ellipsisMenuList} />
         </section>
 
         <Dialog.Description

@@ -2,21 +2,21 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment, type FC } from 'react';
 import { HiDotsVertical } from 'react-icons/hi';
 
-export interface ElipsisMenuItem {
+export interface EllipsisMenuItem {
   name: string;
   action: () => void;
   version?: 'default' | 'red';
 }
 
-interface ElipsisMenuProps {
-  items: ElipsisMenuItem[];
+interface EllipsisMenuProps {
+  items: EllipsisMenuItem[];
 }
 
-const ElipsisMenu: FC<ElipsisMenuProps> = ({ items }) => {
+const EllipsisMenu: FC<EllipsisMenuProps> = ({ items }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-center">
+        <Menu.Button className="inline-flex w-full justify-center outline-none">
           <HiDotsVertical className="text-xl text-primaryMediumGrey" />
         </Menu.Button>
       </div>
@@ -56,4 +56,4 @@ const ElipsisMenu: FC<ElipsisMenuProps> = ({ items }) => {
   );
 };
 
-export default ElipsisMenu;
+export default EllipsisMenu;

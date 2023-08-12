@@ -1,8 +1,8 @@
 import logoImage from '@/assets/logo.png';
 import Button from '@/components/atoms/Button/Button';
-import ElapsisMenu, {
-  type ElipsisMenuItem,
-} from '@/components/molecules/ElapsisMenu/ElapsisMenu';
+import EllipsisMenu, {
+  type EllipsisMenuItem,
+} from '@/components/molecules/EllipsisMenu/EllipsisMenu';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import { useAppDispatch } from '@/hooks/storeHook';
@@ -25,7 +25,7 @@ const Header = () => {
   const [currentModal, setCurrentModal] = useState<ModalType>('create-task');
   const dispatch = useAppDispatch();
 
-  const elipsisMenuList: ElipsisMenuItem[] = [
+  const ellipsisMenuList: EllipsisMenuItem[] = [
     {
       name: 'Edit Board',
       action: () => console.log('Edit board modal'),
@@ -86,7 +86,7 @@ const Header = () => {
             </Button>
           )}
 
-          <ElapsisMenu items={elipsisMenuList} />
+          <EllipsisMenu items={ellipsisMenuList} />
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
