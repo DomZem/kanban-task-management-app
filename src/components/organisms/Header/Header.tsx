@@ -13,8 +13,8 @@ import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import BoardModal from '../BoardModal/BoardModal';
-import CreateTaskModal from '../CreateTaskModal/CreateTaskModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import TaskModal from '../TaskModal/TaskModal';
 
 type ModalType = 'delete-board' | 'edit-board' | 'create-task';
 
@@ -105,7 +105,9 @@ const Header = () => {
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        {currentModal === 'create-task' && <CreateTaskModal />}
+        {currentModal === 'create-task' && (
+          <TaskModal type="create" title="Add New Task" board={board} />
+        )}
         {currentModal === 'edit-board' && (
           <BoardModal type="edit" title="Edit Board" board={board} />
         )}

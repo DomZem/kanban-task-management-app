@@ -7,6 +7,7 @@ import DeleteModal from './components/organisms/DeleteModal/DeleteModal';
 import DesktopSidebar from './components/organisms/DesktopSidebar/DesktopSidebar';
 import Header from './components/organisms/Header/Header';
 import TaskList from './components/organisms/TaskList/TaskList';
+import TaskModal from './components/organisms/TaskModal/TaskModal';
 import ViewTaskModal from './components/organisms/ViewTaskModal/ViewTaskModal';
 import Modal from './components/templates/Modal/Modal';
 import useModal from './components/templates/Modal/useModal';
@@ -16,20 +17,19 @@ import { taskDeleted } from './store/slices/tasksSlice';
 import { transformToPascalCase } from './utility';
 
 const App = () => {
-  const [taskID, setTaskID] = useState<string>('');
+  const [selectedTaskID, setSelectedTaskID] = useState<string>('');
   const tabletMatches = useMediaQuery('(min-width: 768px)');
   const { pathname } = useLocation();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
   const [isTaskToDelete, setIsTaskToDelete] = useState<boolean>(false);
+  const [isTaskToEdit, setIsTaskToEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
     state.boards.find((board) => board.name === transformToPascalCase(pathname))
   );
 
-  if (!board) return;
-
-  const columns = board.columns;
+  if (!board) return null;
 
   const tasks = useAppSelector((state) =>
     state.tasks.filter((task) => task.boardID === board.boardID)
@@ -37,7 +37,15 @@ const App = () => {
 
   const subtasks = useAppSelector((state) => state.subtasks);
 
-  const taskName = tasks.find((task) => task.taskID === taskID)?.title;
+  const task = tasks.find((task) => task.taskID === selectedTaskID);
+
+  const columns = board.columns;
+
+  const handleCancelModal = () => {
+    setIsTaskToEdit(false);
+    setIsTaskToDelete(false);
+    handleCloseModal();
+  };
 
   return (
     <>
@@ -62,7 +70,7 @@ const App = () => {
                           tasks={tasks}
                           subtasks={subtasks}
                           column={column}
-                          onSetTaskID={setTaskID}
+                          onSetTaskID={setSelectedTaskID}
                           onOpenModal={handleOpenModal}
                         />
                       )}
@@ -84,18 +92,25 @@ const App = () => {
           </main>
         </div>
       </div>
-      <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        {!isTaskToDelete ? (
+      <Modal isOpen={isOpen} onCloseModal={handleCancelModal}>
+        {!isTaskToDelete && !isTaskToEdit && (
           <ViewTaskModal
-            taskID={taskID}
-            action={() => setIsTaskToDelete(true)}
+            taskID={selectedTaskID}
+            handleTaskDelete={() => setIsTaskToDelete(true)}
+            handleTaskEdit={() => setIsTaskToEdit(true)}
           />
-        ) : (
+        )}
+
+        {isTaskToEdit && (
+          <TaskModal type="edit" title="Edit Task" task={task} />
+        )}
+
+        {isTaskToDelete && (
           <DeleteModal
             title="Delete this task?"
-            description={`Are you sure you want to delete the ‘${taskName}’ task and its subtasks? This action cannot be reversed.`}
+            description={`Are you sure you want to delete the ‘${task?.title}’ task and its subtasks? This action cannot be reversed.`}
             onDelete={() => {
-              dispatch(taskDeleted({ taskID }));
+              dispatch(taskDeleted({ taskID: selectedTaskID }));
               setIsTaskToDelete(false);
               handleCloseModal();
             }}
