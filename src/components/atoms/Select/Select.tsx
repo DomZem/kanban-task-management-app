@@ -18,7 +18,6 @@ const Select: FC<SelectProps> = ({
   const handleSelectChange = (value: string) => {
     onChange(value);
     onCustomAction?.();
-    console.log('Wykonałem się!');
   };
 
   return (

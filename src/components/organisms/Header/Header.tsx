@@ -5,17 +5,18 @@ import EllipsisMenu, {
 } from '@/components/molecules/EllipsisMenu/EllipsisMenu';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
-import { useAppDispatch } from '@/hooks/storeHook';
+import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { boardDeleted } from '@/store/slices/boardsSlice';
 import { transformToPascalCase } from '@/utility';
 import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
+import BoardModal from '../BoardModal/BoardModal';
 import CreateTaskModal from '../CreateTaskModal/CreateTaskModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
 
-type ModalType = 'delete-board' | 'create-task';
+type ModalType = 'delete-board' | 'edit-board' | 'create-task';
 
 const Header = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
@@ -25,10 +26,18 @@ const Header = () => {
   const [currentModal, setCurrentModal] = useState<ModalType>('create-task');
   const dispatch = useAppDispatch();
 
+  const board = useAppSelector((state) =>
+    state.boards.find((board) => board.name === boardName)
+  );
+
+  if (!board) {
+    return null;
+  }
+
   const ellipsisMenuList: EllipsisMenuItem[] = [
     {
       name: 'Edit Board',
-      action: () => console.log('Edit board modal'),
+      action: () => openModal('edit-board'),
     },
     {
       name: 'Delete Board',
@@ -38,10 +47,16 @@ const Header = () => {
   ];
 
   const openModal = (modalType: ModalType) => {
-    if (modalType === 'create-task') {
-      setCurrentModal('create-task');
-    } else if (modalType === 'delete-board') {
-      setCurrentModal('delete-board');
+    switch (modalType) {
+      case 'create-task':
+        setCurrentModal('create-task');
+        break;
+      case 'edit-board':
+        setCurrentModal('edit-board');
+        break;
+      case 'delete-board':
+        setCurrentModal('delete-board');
+        break;
     }
     handleOpenModal();
   };
@@ -91,6 +106,9 @@ const Header = () => {
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
         {currentModal === 'create-task' && <CreateTaskModal />}
+        {currentModal === 'edit-board' && (
+          <BoardModal type="edit" title="Edit Board" board={board} />
+        )}
         {currentModal === 'delete-board' && (
           <DeleteModal
             title="Delete this board?"

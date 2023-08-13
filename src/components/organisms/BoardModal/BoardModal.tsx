@@ -1,23 +1,49 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable no-case-declarations */
 import Input from '@/components/atoms/Input/Input';
 import PrimaryButton from '@/components/atoms/PrimaryButton/PrimaryButton';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
 import { useAppDispatch } from '@/hooks/storeHook';
 import { boardAdded } from '@/store/slices/boardsSlice';
+import { type IBoard } from '@/types';
 import { Dialog } from '@headlessui/react';
+import { type FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-interface NewBoardFormValues {
+interface CreateBoardModalProps {
+  title: string;
+  type: 'create';
+}
+
+interface EditBoardModalProps {
+  title: string;
+  type: 'edit';
+  board: IBoard;
+}
+
+type BoardModalProps = CreateBoardModalProps | EditBoardModalProps;
+
+interface BoardFormValues {
   title: string;
   columns: Array<{ title: string }>;
 }
 
-const CreateBoardModal = () => {
+const BoardModal: FC<BoardModalProps> = (props) => {
   const dispatch = useAppDispatch();
 
-  const { register, control, handleSubmit } = useForm<NewBoardFormValues>({
+  let initialColumns: Array<{ title: string }> = [{ title: '' }];
+
+  if (props.type === 'edit') {
+    const editProps = props as EditBoardModalProps;
+    initialColumns = editProps.board.columns.map((columnTitle) => ({
+      title: columnTitle,
+    }));
+  }
+
+  const { register, control, handleSubmit } = useForm<BoardFormValues>({
     defaultValues: {
-      title: '',
-      columns: [{ title: '' }],
+      title: `${props.type === 'edit' ? props.board.name : ''}`,
+      columns: initialColumns,
     },
   });
 
@@ -27,10 +53,18 @@ const CreateBoardModal = () => {
   });
 
   // Send data to store
-  const onSubmit = (data: NewBoardFormValues) => {
-    const columns: string[] = [];
-    data.columns.forEach((column) => columns.push(column.title));
-    dispatch(boardAdded(data.title, columns));
+  const onSubmit = ({ columns, title }: BoardFormValues) => {
+    const formColumns: string[] = [];
+    columns.forEach(({ title }) => formColumns.push(title));
+
+    switch (props.type) {
+      case 'create':
+        dispatch(boardAdded(title, formColumns));
+        break;
+      case 'edit':
+        // Send edited data to store
+        break;
+    }
   };
 
   return (
@@ -40,7 +74,7 @@ const CreateBoardModal = () => {
       className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
     >
       <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
-        Add New Board
+        {props.title}
       </Dialog.Title>
 
       <section>
@@ -75,9 +109,11 @@ const CreateBoardModal = () => {
         + Add New Column
       </PrimaryButton>
 
-      <PrimaryButton type="submit">Create New Board</PrimaryButton>
+      <PrimaryButton type="submit">
+        {props.type === 'create' ? 'Create New Board' : 'Save changes'}
+      </PrimaryButton>
     </Dialog.Panel>
   );
 };
 
-export default CreateBoardModal;
+export default BoardModal;

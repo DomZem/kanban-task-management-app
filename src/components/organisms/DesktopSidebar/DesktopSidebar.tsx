@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { IoMdEye, IoMdEyeOff, IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { TbLayoutBoardSplit } from 'react-icons/tb';
 import { NavLink, useLocation } from 'react-router-dom';
-import CreateBoardModal from '../CreateBoardModal/CreateBoardModal';
+import BoardModal from '../BoardModal/BoardModal';
 
 const DesktopSidebar = () => {
   const [isActive, setIsActive] = useState(false);
@@ -83,7 +83,7 @@ const DesktopSidebar = () => {
         )}
       </aside>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        <CreateBoardModal />
+        <BoardModal type="create" title="Add New Board" />
       </Modal>
     </>
   );
