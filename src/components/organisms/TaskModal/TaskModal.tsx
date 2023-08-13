@@ -63,7 +63,12 @@ const TaskModal: FC<TaskModalProps> = (props) => {
     );
   }
 
-  const { register, control, handleSubmit } = useForm<TaskFormValues>({
+  const {
+    register,
+    formState: { errors },
+    control,
+    handleSubmit,
+  } = useForm<TaskFormValues>({
     defaultValues: {
       title: `${props.type === 'edit' ? props.task.title : ''}`,
       description: `${props.type === 'edit' ? props.task.description : ''}`,
@@ -105,7 +110,11 @@ const TaskModal: FC<TaskModalProps> = (props) => {
         <label className="label" htmlFor="title">
           Title
         </label>
-        <Input placeholder="e.g Web Design" {...register('title')} />
+        <Input
+          placeholder="e.g Web Design"
+          error={errors.title}
+          {...register('title', { required: "Can't be empty" })}
+        />
       </section>
 
       <section className="flex flex-col gap-y-2">
@@ -126,8 +135,11 @@ const TaskModal: FC<TaskModalProps> = (props) => {
             <li key={field.id}>
               <InputRemoveField
                 placeholder="e.g Make coffee"
+                error={errors.subtasks?.[index]?.title}
                 onRemove={() => remove(index)}
-                {...register(`subtasks.${index}.title`)}
+                {...register(`subtasks.${index}.title`, {
+                  required: "Can't be empty",
+                })}
               />
             </li>
           ))}

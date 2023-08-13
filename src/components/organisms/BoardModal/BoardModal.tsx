@@ -40,7 +40,12 @@ const BoardModal: FC<BoardModalProps> = (props) => {
     }));
   }
 
-  const { register, control, handleSubmit } = useForm<BoardFormValues>({
+  const {
+    register,
+    formState: { errors },
+    control,
+    handleSubmit,
+  } = useForm<BoardFormValues>({
     defaultValues: {
       title: `${props.type === 'edit' ? props.board.name : ''}`,
       columns: initialColumns,
@@ -82,7 +87,11 @@ const BoardModal: FC<BoardModalProps> = (props) => {
           <label className="text-xs font-bold text-primaryMediumGrey">
             Board Name
           </label>
-          <Input placeholder="e.g Web Design" {...register('title')} />
+          <Input
+            placeholder="e.g Web Design"
+            error={errors.title}
+            {...register('title', { required: "Can't be empty" })}
+          />
         </div>
       </section>
 
@@ -93,8 +102,11 @@ const BoardModal: FC<BoardModalProps> = (props) => {
             <li key={field.id}>
               <InputRemoveField
                 placeholder="e.g Todo"
+                error={errors.columns?.[index]?.title}
                 onRemove={() => remove(index)}
-                {...register(`columns.${index}.title`)}
+                {...register(`columns.${index}.title`, {
+                  required: "Can't be empty",
+                })}
               />
             </li>
           ))}
