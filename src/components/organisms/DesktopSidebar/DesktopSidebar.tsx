@@ -21,7 +21,7 @@ const DesktopSidebar = () => {
   return (
     <>
       <aside
-        className={`flex flex-col justify-between border-primaryLinesLight bg-primaryWhite transition-[width] duration-200 dark:border-primaryLinesDark dark:bg-primaryDarkGrey ${
+        className={`flex flex-col justify-between border-primaryLinesLight bg-primaryWhite transition-[width] duration-200 ease-in-out dark:border-primaryLinesDark dark:bg-primaryDarkGrey ${
           isActive ? 'w-64 border-r-[1px]' : 'w-0'
         }`}
       >
@@ -59,7 +59,7 @@ const DesktopSidebar = () => {
             <div className="flex items-center gap-x-4">
               <IoMdSunny className="text-xl text-primaryMediumGrey" />
 
-              <Toggle onChange={toggleMode} />
+              <Toggle isSidebarActive={isActive} onChange={toggleMode} />
 
               <IoMdMoon className="text-xl text-primaryMediumGrey" />
             </div>
@@ -72,16 +72,17 @@ const DesktopSidebar = () => {
             <p className="ml-3">Hide Sidebar</p>
           </button>
         </section>
-
-        {!isActive && (
-          <button
-            className="fixed bottom-8 left-0 z-30 flex h-14 w-16 items-center justify-center rounded-r-[100px] bg-primaryPurple duration-200 hover:bg-primaryPurpleHover"
-            onClick={() => setIsActive(true)}
-          >
-            <IoMdEye className="text-xl text-primaryWhite" />
-          </button>
-        )}
       </aside>
+
+      {!isActive && (
+        <button
+          className="fixed bottom-8 left-0 z-30 flex h-14 w-16 items-center justify-center rounded-r-[100px] bg-primaryPurple duration-200 hover:bg-primaryPurpleHover"
+          onClick={() => setIsActive(true)}
+        >
+          <IoMdEye className="text-xl text-primaryWhite" />
+        </button>
+      )}
+
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
         <BoardModal type="create" title="Add New Board" />
       </Modal>
