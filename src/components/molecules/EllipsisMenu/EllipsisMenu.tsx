@@ -15,8 +15,8 @@ interface EllipsisMenuProps {
 const EllipsisMenu: FC<EllipsisMenuProps> = ({ items }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className="inline-flex w-full justify-center outline-none">
+      <div className="flex h-full w-full items-center justify-center">
+        <Menu.Button className="outline-none">
           <HiDotsVertical className="text-xl text-primaryMediumGrey" />
         </Menu.Button>
       </div>

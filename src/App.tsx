@@ -53,48 +53,48 @@ const App = () => {
         <Header />
         <div className="flex overflow-hidden">
           {tabletMatches && <DesktopSidebar />}
-          <main className="flex h-full w-full flex-1 items-center justify-center overflow-y-auto bg-primaryLightGrey p-4 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
+          <main className="flex-1 overflow-y-auto bg-primaryLightGrey p-4 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
             {columns.length > 0 ? (
-              <div className="h-full w-full flex-1">
-                <ul className="flex h-full justify-start gap-x-6">
-                  {columns.map((columnName) => {
-                    const taskCount = tasks.filter(
-                      (task) => task.status === columnName
-                    ).length;
+              <ul className="flex min-w-fit justify-start gap-x-6">
+                {columns.map((columnName) => {
+                  const taskCount = tasks.filter(
+                    (task) => task.status === columnName
+                  ).length;
 
-                    return (
-                      <li className="w-[280px]" key={columnName}>
-                        <div className="flex items-center gap-x-3">
-                          <div
-                            className={`bg- h-4 w-4 rounded-full bg-primaryPurple`}
-                          ></div>
-                          <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
-                            {columnName} ({taskCount})
-                          </h3>
-                        </div>
-                        {tasks && (
-                          <TaskList
-                            tasks={tasks}
-                            subtasks={subtasks}
-                            column={columnName}
-                            onSetTaskID={setSelectedTaskID}
-                            onOpenModal={handleOpenModal}
-                          />
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+                  return (
+                    <li className="w-[280px]" key={columnName}>
+                      <div className="flex items-center gap-x-3">
+                        <div
+                          className={`bg- h-4 w-4 rounded-full bg-primaryPurple`}
+                        ></div>
+                        <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
+                          {columnName} ({taskCount})
+                        </h3>
+                      </div>
+                      {tasks && (
+                        <TaskList
+                          tasks={tasks}
+                          subtasks={subtasks}
+                          column={columnName}
+                          onSetTaskID={setSelectedTaskID}
+                          onOpenModal={handleOpenModal}
+                        />
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             ) : (
-              <div className="flex flex-col items-center gap-y-6">
-                <h3 className="text-center text-lg font-medium">
-                  This board is empty. Create a new column to get started.
-                </h3>
-                <Button>
-                  <MdAdd className="text-xl text-primaryWhite" />
-                  Add New Column
-                </Button>
+              <div className="flex min-h-full items-center justify-center">
+                <div className="flex flex-1 flex-col items-center gap-y-6">
+                  <h3 className="text-center text-lg font-medium">
+                    This board is empty. Create a new column to get started.
+                  </h3>
+                  <Button>
+                    <MdAdd className="text-xl text-primaryWhite" />
+                    Add New Column
+                  </Button>
+                </div>
               </div>
             )}
           </main>
