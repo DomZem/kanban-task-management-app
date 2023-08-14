@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'usehooks-ts';
 import Button from './components/atoms/Button/Button';
 import DeleteModal from './components/organisms/DeleteModal/DeleteModal';
 import DesktopSidebar from './components/organisms/DesktopSidebar/DesktopSidebar';
@@ -12,7 +13,6 @@ import ViewTaskModal from './components/organisms/ViewTaskModal/ViewTaskModal';
 import Modal from './components/templates/Modal/Modal';
 import useModal from './components/templates/Modal/useModal';
 import { useAppDispatch, useAppSelector } from './hooks/storeHook';
-import useMediaQuery from './hooks/useMediaQuery';
 import { taskDeleted } from './store/slices/tasksSlice';
 import { transformToPascalCase } from './utility';
 
@@ -54,28 +54,36 @@ const App = () => {
         <div className="flex overflow-hidden">
           {tabletMatches && <DesktopSidebar />}
           <main className="flex h-full w-full flex-1 items-center justify-center overflow-y-auto bg-primaryLightGrey p-4 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
-            {columns ? (
+            {columns.length > 0 ? (
               <div className="h-full w-full flex-1">
                 <ul className="flex h-full justify-start gap-x-6">
-                  {columns.map((column) => (
-                    <li className="w-[280px]" key={column}>
-                      <div className="flex items-center gap-x-3">
-                        <div className="h-4 w-4 rounded-full bg-teal-500"></div>
-                        <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
-                          {column}
-                        </h3>
-                      </div>
-                      {tasks && (
-                        <TaskList
-                          tasks={tasks}
-                          subtasks={subtasks}
-                          column={column}
-                          onSetTaskID={setSelectedTaskID}
-                          onOpenModal={handleOpenModal}
-                        />
-                      )}
-                    </li>
-                  ))}
+                  {columns.map((columnName) => {
+                    const taskCount = tasks.filter(
+                      (task) => task.status === columnName
+                    ).length;
+
+                    return (
+                      <li className="w-[280px]" key={columnName}>
+                        <div className="flex items-center gap-x-3">
+                          <div
+                            className={`bg- h-4 w-4 rounded-full bg-primaryPurple`}
+                          ></div>
+                          <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
+                            {columnName} ({taskCount})
+                          </h3>
+                        </div>
+                        {tasks && (
+                          <TaskList
+                            tasks={tasks}
+                            subtasks={subtasks}
+                            column={columnName}
+                            onSetTaskID={setSelectedTaskID}
+                            onOpenModal={handleOpenModal}
+                          />
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ) : (

@@ -6,12 +6,12 @@ import EllipsisMenu, {
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import useMediaQuery from '@/hooks/useMediaQuery';
 import { boardDeleted } from '@/store/slices/boardsSlice';
 import { transformToPascalCase } from '@/utility';
 import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
+import { useMediaQuery } from 'usehooks-ts';
 import BoardModal from '../BoardModal/BoardModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import TaskModal from '../TaskModal/TaskModal';
@@ -106,7 +106,7 @@ const Header = () => {
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
         {currentModal === 'create-task' && (
-          <TaskModal type="create" title="Add New Task" board={board} />
+          <TaskModal type="create" title="Add New Task" />
         )}
         {currentModal === 'edit-board' && (
           <BoardModal type="edit" title="Edit Board" board={board} />
