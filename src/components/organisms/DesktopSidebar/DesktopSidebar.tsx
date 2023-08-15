@@ -1,4 +1,5 @@
 import Toggle from '@/components/atoms/Toggle/Toggle';
+import MenuListItem from '@/components/molecules/MenuListItem/MenuListItem';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import { useAppSelector } from '@/hooks/storeHook';
@@ -7,7 +8,7 @@ import { transformToKebabCase } from '@/utility';
 import { useState } from 'react';
 import { IoMdEye, IoMdEyeOff, IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { TbLayoutBoardSplit } from 'react-icons/tb';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import BoardModal from '../BoardModal/BoardModal';
 
 const DesktopSidebar = () => {
@@ -31,18 +32,12 @@ const DesktopSidebar = () => {
           </h3>
           <nav className="flex-1 overflow-y-auto overflow-x-hidden">
             {boards.map(({ name }) => (
-              <NavLink
-                className={`flex w-60 cursor-pointer items-center rounded-r-[100px] bg-opacity-10 px-6 py-4 font-bold text-primaryMediumGrey duration-200 ${
-                  pathname.substring(1) === transformToKebabCase(name)
-                    ? 'bg-primaryPurple text-primaryWhite'
-                    : 'hover:bg-[#635FC7]/10 hover:text-primaryPurple hover:dark:bg-primaryWhite'
-                }`}
-                to={transformToKebabCase(name)}
+              <MenuListItem
+                value={name}
+                link={transformToKebabCase(name)}
+                isActive={pathname.substring(1) === transformToKebabCase(name)}
                 key={name}
-              >
-                <TbLayoutBoardSplit className="text-xl" />
-                <p className="ml-3">{name}</p>
-              </NavLink>
+              />
             ))}
           </nav>
           <button

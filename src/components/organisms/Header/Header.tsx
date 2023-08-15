@@ -14,9 +14,15 @@ import { useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 import BoardModal from '../BoardModal/BoardModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import MobileSidebar from '../MobileSidebar/MobileSidebar';
 import TaskModal from '../TaskModal/TaskModal';
 
-type ModalType = 'delete-board' | 'edit-board' | 'create-task';
+export type ModalType =
+  | 'create-board'
+  | 'delete-board'
+  | 'edit-board'
+  | 'create-task'
+  | 'mobile-sidebar';
 
 const Header = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
@@ -57,6 +63,9 @@ const Header = () => {
       case 'delete-board':
         setCurrentModal('delete-board');
         break;
+      case 'mobile-sidebar':
+        setCurrentModal('mobile-sidebar');
+        break;
     }
     handleOpenModal();
   };
@@ -83,7 +92,10 @@ const Header = () => {
               {boardName}
             </h2>
 
-            <button className="md:hidden">
+            <button
+              className="md:hidden"
+              onClick={() => openModal('mobile-sidebar')}
+            >
               <MdKeyboardArrowDown className="p-1 text-3xl text-primaryPurple" />
             </button>
           </div>
@@ -105,6 +117,7 @@ const Header = () => {
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
+        {currentModal === 'mobile-sidebar' && <MobileSidebar onCurrentModalChange={setCurrentModal} />}
         {currentModal === 'create-task' && (
           <TaskModal type="create" title="Add New Task" />
         )}
@@ -118,6 +131,9 @@ const Header = () => {
             onDelete={() => dispatch(boardDeleted({ boardName }))}
             onCancel={handleCloseModal}
           />
+        )}
+        {currentModal === 'create-board' && (
+          <BoardModal type="create" title="Add New Board" />
         )}
       </Modal>
     </>

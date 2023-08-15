@@ -15,31 +15,33 @@ const DeleteModal: FC<DeleteModalProps> = ({
   onDelete,
   onCancel,
 }) => (
-  <Dialog.Panel
-    as="div"
-    className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
-  >
-    <Dialog.Title className="text-lg font-bold text-primaryRed">
-      {title}
-    </Dialog.Title>
+  <div className="flex min-h-full items-center justify-center p-4">
+    <Dialog.Panel
+      as="div"
+      className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
+    >
+      <Dialog.Title className="text-lg font-bold text-primaryRed">
+        {title}
+      </Dialog.Title>
 
-    <Dialog.Description className="text-sm font-medium leading-6 text-primaryMediumGrey">
-      {description}
-    </Dialog.Description>
+      <Dialog.Description className="text-sm font-medium leading-6 text-primaryMediumGrey">
+        {description}
+      </Dialog.Description>
 
-    <section className="flex gap-x-4">
-      <PrimaryButton className="flex-1" version="Red" onClick={onDelete}>
-        Delete
-      </PrimaryButton>
-      <PrimaryButton
-        version="LightPurple"
-        className="flex-1"
-        onClick={onCancel}
-      >
-        Cancel
-      </PrimaryButton>
-    </section>
-  </Dialog.Panel>
+      <section className="flex gap-x-4">
+        <PrimaryButton className="flex-1" version="Red" onClick={onDelete}>
+          Delete
+        </PrimaryButton>
+        <PrimaryButton
+          version="LightPurple"
+          className="flex-1"
+          onClick={onCancel}
+        >
+          Cancel
+        </PrimaryButton>
+      </section>
+    </Dialog.Panel>
+  </div>
 );
 
 export default DeleteModal;

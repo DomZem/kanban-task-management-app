@@ -73,58 +73,60 @@ const BoardModal: FC<BoardModalProps> = (props) => {
   };
 
   return (
-    <Dialog.Panel
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
-    >
-      <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
-        {props.title}
-      </Dialog.Title>
-
-      <section>
-        <div className="flex flex-col gap-y-2">
-          <label className="text-xs font-bold text-primaryMediumGrey">
-            Board Name
-          </label>
-          <Input
-            placeholder="e.g Web Design"
-            error={errors.title}
-            {...register('title', { required: "Can't be empty" })}
-          />
-        </div>
-      </section>
-
-      <section>
-        <p className="label mb-2">Board Columns</p>
-        <ul className="flex flex-col gap-y-3">
-          {fields.map((field, index) => (
-            <li key={field.id}>
-              <InputRemoveField
-                placeholder="e.g Todo"
-                error={errors.columns?.[index]?.title}
-                onRemove={() => remove(index)}
-                {...register(`columns.${index}.title`, {
-                  required: "Can't be empty",
-                })}
-              />
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <PrimaryButton
-        type="button"
-        version="LightPurple"
-        onClick={() => append({ title: '' })}
+    <div className="flex min-h-full items-center justify-center p-4">
+      <Dialog.Panel
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
       >
-        + Add New Column
-      </PrimaryButton>
+        <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
+          {props.title}
+        </Dialog.Title>
 
-      <PrimaryButton type="submit">
-        {props.type === 'create' ? 'Create New Board' : 'Save changes'}
-      </PrimaryButton>
-    </Dialog.Panel>
+        <section>
+          <div className="flex flex-col gap-y-2">
+            <label className="text-xs font-bold text-primaryMediumGrey">
+              Board Name
+            </label>
+            <Input
+              placeholder="e.g Web Design"
+              error={errors.title}
+              {...register('title', { required: "Can't be empty" })}
+            />
+          </div>
+        </section>
+
+        <section>
+          <p className="label mb-2">Board Columns</p>
+          <ul className="flex flex-col gap-y-3">
+            {fields.map((field, index) => (
+              <li key={field.id}>
+                <InputRemoveField
+                  placeholder="e.g Todo"
+                  error={errors.columns?.[index]?.title}
+                  onRemove={() => remove(index)}
+                  {...register(`columns.${index}.title`, {
+                    required: "Can't be empty",
+                  })}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <PrimaryButton
+          type="button"
+          version="LightPurple"
+          onClick={() => append({ title: '' })}
+        >
+          + Add New Column
+        </PrimaryButton>
+
+        <PrimaryButton type="submit">
+          {props.type === 'create' ? 'Create New Board' : 'Save changes'}
+        </PrimaryButton>
+      </Dialog.Panel>
+    </div>
   );
 };
 

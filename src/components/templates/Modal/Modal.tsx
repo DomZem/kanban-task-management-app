@@ -31,11 +31,7 @@ const Modal: FC<ModalProps> = ({ onCloseModal, isOpen, children }) => {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4">
-              {children}
-            </div>
-          </div>
+          <div className="fixed inset-0 overflow-y-auto">{children}</div>
         </Transition.Child>
       </Dialog>
     </Transition>
