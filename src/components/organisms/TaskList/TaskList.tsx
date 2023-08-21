@@ -18,8 +18,8 @@ const TaskList: FC<TaskListProps> = ({
   onOpenModal,
 }) => (
   <ul className="mt-6 flex flex-col gap-y-5">
-    {tasks.map(({ taskID, title, status }) => {
-      if (status === column) {
+    {tasks.map(({ taskID, title, statusID }) => {
+      if (statusID === column) {
         const subtasksArr = subtasks.filter(
           (subtask) => subtask.taskID === taskID
         );

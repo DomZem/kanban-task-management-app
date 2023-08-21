@@ -1,26 +1,6 @@
-import { type IBoard } from '@/types';
+import { initialState } from '@/data/boards';
+import { type IBoard, type IStatus } from '@/types';
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
-
-const initialState: IBoard[] = [
-  {
-    boardID: 'I8xa1o7b8GYYMuSUhDxMG',
-    name: 'Platform Launch',
-    columns: ['Todo', 'Doing', 'Done'],
-    isActive: true,
-  },
-  {
-    boardID: 'puUXSY2J7yE5EjkBPk335',
-    name: 'Marketing Plan',
-    columns: ['Todo', 'Done'],
-    isActive: false,
-  },
-  {
-    boardID: 'NN8M25A1URsnCR9alMzAf',
-    name: 'Roadmap',
-    columns: ['Inspiration', 'Plan', 'Work', 'Done'],
-    isActive: false,
-  },
-];
 
 export const boardsSlice = createSlice({
   name: 'boards',
@@ -40,22 +20,32 @@ export const boardsSlice = createSlice({
       reducer(state, action: PayloadAction<IBoard>) {
         state.push(action.payload);
       },
-      prepare(name: string, columns: string[]) {
+      prepare(name: string, statuses?: IStatus[]) {
         return {
           payload: {
             boardID: nanoid(),
             name,
-            columns,
+            statuses: statuses ?? [],
             isActive: false,
           },
         };
       },
     },
-    boardDeleted: (state, action: PayloadAction<IBoard>) => {
-      const { boardID } = action.payload;
-      const indexToRemove = state.findIndex(
-        (board) => board.boardID === boardID
-      );
+    boardEdited: (
+      state,
+      action: PayloadAction<{ name: string; statuses: IStatus[] }>
+    ) => {
+      const { name, statuses } = action.payload;
+      const existingBoard = state.find(({ isActive }) => isActive);
+
+      if (existingBoard) {
+        existingBoard.name = name;
+        [...existingBoard.statuses] = [...statuses];
+        console.log('Done');
+      }
+    },
+    boardDeleted: (state) => {
+      const indexToRemove = state.findIndex(({ isActive }) => isActive);
 
       if (indexToRemove !== -1) {
         state.splice(indexToRemove, 1);
@@ -67,6 +57,7 @@ export const boardsSlice = createSlice({
   },
 });
 
-export const { boardActivated, boardAdded, boardDeleted } = boardsSlice.actions;
+export const { boardActivated, boardAdded, boardEdited, boardDeleted } =
+  boardsSlice.actions;
 
 export default boardsSlice.reducer;

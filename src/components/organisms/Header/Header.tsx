@@ -67,7 +67,7 @@ const Header = () => {
   };
 
   const handleDeleteBoard = () => {
-    dispatch(boardDeleted(board));
+    dispatch(boardDeleted());
     handleCloseModal();
   };
 
@@ -125,7 +125,7 @@ const Header = () => {
           <TaskModal type="create" title="Add New Task" />
         )}
         {currentModal === 'edit-board' && (
-          <BoardModal type="edit" title="Edit Board" board={board} />
+          <BoardModal type="edit" title="Edit Board" />
         )}
         {currentModal === 'delete-board' && (
           <DeleteModal
@@ -136,7 +136,7 @@ const Header = () => {
           />
         )}
         {currentModal === 'create-board' && (
-          <BoardModal type="create" title="Add New Board" />
+          <BoardModal type="add" title="Add New Board" />
         )}
       </Modal>
     </>

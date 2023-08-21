@@ -1,73 +1,65 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-/* eslint-disable no-case-declarations */
 import Input from '@/components/atoms/Input/Input';
 import PrimaryButton from '@/components/atoms/PrimaryButton/PrimaryButton';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
-import { useAppDispatch } from '@/hooks/storeHook';
-import { boardAdded } from '@/store/slices/boardsSlice';
-import { type IBoard } from '@/types';
+import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
+import { boardAdded, boardEdited } from '@/store/slices/boardsSlice';
+import { type IStatus } from '@/types';
 import { Dialog } from '@headlessui/react';
+import { nanoid } from '@reduxjs/toolkit';
 import { type FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-interface CreateBoardModalProps {
+interface BoardModalProps {
   title: string;
-  type: 'create';
+  type: 'add' | 'edit';
 }
-
-interface EditBoardModalProps {
-  title: string;
-  type: 'edit';
-  board: IBoard;
-}
-
-type BoardModalProps = CreateBoardModalProps | EditBoardModalProps;
 
 interface BoardFormValues {
   title: string;
-  columns: Array<{ title: string }>;
+  statuses: IStatus[];
 }
 
-const BoardModal: FC<BoardModalProps> = (props) => {
+const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
   const dispatch = useAppDispatch();
 
-  let initialColumns: Array<{ title: string }> = [{ title: '' }];
+  const board = useAppSelector((state) =>
+    state.boards.find(({ isActive }) => isActive)
+  );
 
-  if (props.type === 'edit') {
-    const editProps = props as EditBoardModalProps;
-    initialColumns = editProps.board.columns.map((columnTitle) => ({
-      title: columnTitle,
-    }));
+  if (!board) {
+    return <div>Something went wrong. Board not found!</div>;
   }
+
+  const initialStatuses: IStatus[] =
+    type === 'edit' ? board.statuses : [{ statusID: nanoid(), name: '' }];
 
   const {
     register,
     formState: { errors },
     control,
     handleSubmit,
+    reset,
   } = useForm<BoardFormValues>({
     defaultValues: {
-      title: `${props.type === 'edit' ? props.board.name : ''}`,
-      columns: initialColumns,
+      title: `${type === 'edit' ? board.name : ''}`,
+      statuses: initialStatuses,
     },
   });
 
   const { fields, append, remove } = useFieldArray({
-    name: 'columns',
+    name: 'statuses',
     control,
   });
 
   // Send data to store
-  const onSubmit = ({ columns, title }: BoardFormValues) => {
-    const formColumns: string[] = [];
-    columns.forEach(({ title }) => formColumns.push(title));
-
-    switch (props.type) {
-      case 'create':
-        dispatch(boardAdded(title, formColumns));
+  const onSubmit = ({ title, statuses }: BoardFormValues) => {
+    switch (type) {
+      case 'add':
+        dispatch(boardAdded(title, statuses));
+        reset();
         break;
       case 'edit':
-        // Send edited data to store
+        dispatch(boardEdited({ name: title, statuses }));
         break;
     }
   };
@@ -80,7 +72,7 @@ const BoardModal: FC<BoardModalProps> = (props) => {
         className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
       >
         <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
-          {props.title}
+          {title}
         </Dialog.Title>
 
         <section>
@@ -103,9 +95,9 @@ const BoardModal: FC<BoardModalProps> = (props) => {
               <li key={field.id}>
                 <InputRemoveField
                   placeholder="e.g Todo"
-                  error={errors.columns?.[index]?.title}
+                  error={errors.statuses?.[index]?.name}
                   onRemove={() => remove(index)}
-                  {...register(`columns.${index}.title`, {
+                  {...register(`statuses.${index}.name`, {
                     required: "Can't be empty",
                   })}
                 />
@@ -117,13 +109,13 @@ const BoardModal: FC<BoardModalProps> = (props) => {
         <PrimaryButton
           type="button"
           version="LightPurple"
-          onClick={() => append({ title: '' })}
+          onClick={() => append({ statusID: nanoid(), name: '' })}
         >
           + Add New Column
         </PrimaryButton>
 
         <PrimaryButton type="submit">
-          {props.type === 'create' ? 'Create New Board' : 'Save changes'}
+          {type === 'add' ? 'Create New Board' : 'Save changes'}
         </PrimaryButton>
       </Dialog.Panel>
     </div>

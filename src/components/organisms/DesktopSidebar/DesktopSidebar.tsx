@@ -77,7 +77,7 @@ const DesktopSidebar = () => {
       )}
 
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        <BoardModal type="create" title="Add New Board" />
+        <BoardModal type="add" title="Add New Board" />
       </Modal>
     </>
   );

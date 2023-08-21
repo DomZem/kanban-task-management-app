@@ -36,7 +36,7 @@ const App = () => {
 
   const task = tasks.find((task) => task.taskID === selectedTaskID);
 
-  const columns = board.columns;
+  const statuses = board.statuses;
 
   const handleCancelModal = () => {
     setIsTaskToEdit(false);
@@ -51,28 +51,28 @@ const App = () => {
         <div className="flex overflow-hidden">
           {tabletMatches && <DesktopSidebar />}
           <main className="flex-1 overflow-y-auto bg-primaryLightGrey p-4 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
-            {columns.length > 0 ? (
+            {statuses.length > 0 ? (
               <ul className="flex min-w-fit justify-start gap-x-6">
-                {columns.map((columnName) => {
+                {statuses.map(({ statusID, name }) => {
                   const taskCount = tasks.filter(
-                    (task) => task.status === columnName
+                    (task) => task.statusID === statusID
                   ).length;
 
                   return (
-                    <li className="w-[280px]" key={columnName}>
+                    <li className="w-[280px]" key={statusID}>
                       <div className="flex items-center gap-x-3">
                         <div
                           className={`bg- h-4 w-4 rounded-full bg-primaryPurple`}
                         ></div>
                         <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
-                          {columnName} ({taskCount})
+                          {name} ({taskCount})
                         </h3>
                       </div>
                       {tasks && (
                         <TaskList
                           tasks={tasks}
                           subtasks={subtasks}
-                          column={columnName}
+                          column={statusID}
                           onSetTaskID={setSelectedTaskID}
                           onOpenModal={handleOpenModal}
                         />

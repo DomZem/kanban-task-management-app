@@ -1,15 +1,15 @@
 export interface IBoard {
   boardID: string;
   name: string;
-  columns: IStatus[];
+  statuses: IStatus[];
   isActive: boolean;
 }
 
 export interface ITask {
   taskID: string;
   title: string;
-  description: string;
-  status: IStatus;
+  description?: string;
+  statusID: string;
   boardID: string;
 }
 
@@ -20,4 +20,7 @@ export interface ISubtask {
   taskID: string;
 }
 
-export type IStatus = string;
+export interface IStatus {
+  statusID: string;
+  name: string;
+}
