@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 import Button from './components/atoms/Button/Button';
 import DeleteModal from './components/organisms/DeleteModal/DeleteModal';
@@ -14,19 +13,17 @@ import Modal from './components/templates/Modal/Modal';
 import useModal from './components/templates/Modal/useModal';
 import { useAppDispatch, useAppSelector } from './hooks/storeHook';
 import { taskDeleted } from './store/slices/tasksSlice';
-import { transformToPascalCase } from './utility';
 
 const App = () => {
   const [selectedTaskID, setSelectedTaskID] = useState<string>('');
   const tabletMatches = useMediaQuery('(min-width: 768px)');
-  const { pathname } = useLocation();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
   const [isTaskToDelete, setIsTaskToDelete] = useState<boolean>(false);
   const [isTaskToEdit, setIsTaskToEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
-    state.boards.find((board) => board.name === transformToPascalCase(pathname))
+    state.boards.find(({ isActive }) => isActive)
   );
 
   if (!board) return null;

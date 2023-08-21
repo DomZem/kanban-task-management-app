@@ -2,21 +2,19 @@ import Toggle from '@/components/atoms/Toggle/Toggle';
 import MenuListItem from '@/components/molecules/MenuListItem/MenuListItem';
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
-import { useAppSelector } from '@/hooks/storeHook';
+import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import useDarkMode from '@/hooks/useDarkMode';
-import { transformToKebabCase } from '@/utility';
+import { boardActivated } from '@/store/slices/boardsSlice';
 import { useState } from 'react';
 import { IoMdEye, IoMdEyeOff, IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { TbLayoutBoardSplit } from 'react-icons/tb';
-import { useLocation } from 'react-router-dom';
 import BoardModal from '../BoardModal/BoardModal';
 
 const DesktopSidebar = () => {
   const [isActive, setIsActive] = useState(false);
   const boards = useAppSelector((state) => state.boards);
-  const { pathname } = useLocation();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
-
+  const dispatch = useAppDispatch();
   const toggleMode = useDarkMode();
 
   return (
@@ -31,12 +29,12 @@ const DesktopSidebar = () => {
             all boards ({boards.length})
           </h3>
           <nav className="flex-1 overflow-y-auto overflow-x-hidden">
-            {boards.map(({ name }) => (
+            {boards.map(({ boardID, name, isActive }) => (
               <MenuListItem
                 value={name}
-                link={transformToKebabCase(name)}
-                isActive={pathname.substring(1) === transformToKebabCase(name)}
+                isActive={isActive}
                 key={name}
+                onClick={() => dispatch(boardActivated({ boardID }))}
               />
             ))}
           </nav>

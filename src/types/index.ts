@@ -2,6 +2,7 @@ export interface IBoard {
   boardID: string;
   name: string;
   columns: IStatus[];
+  isActive: boolean;
 }
 
 export interface ITask {

@@ -26,7 +26,7 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
   );
 
   const board = useAppSelector((state) =>
-    state.boards.find((board) => board.boardID === task?.boardID)
+    state.boards.find(({ isActive }) => isActive)
   );
 
   const subtasks = useAppSelector((state) =>

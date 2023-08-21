@@ -1,13 +1,12 @@
 import Toggle from '@/components/atoms/Toggle/Toggle';
 import MenuListItem from '@/components/molecules/MenuListItem/MenuListItem';
-import { useAppSelector } from '@/hooks/storeHook';
+import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import useDarkMode from '@/hooks/useDarkMode';
-import { transformToKebabCase } from '@/utility';
+import { boardActivated } from '@/store/slices/boardsSlice';
 import { Dialog } from '@headlessui/react';
 import { type FC } from 'react';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { TbLayoutBoardSplit } from 'react-icons/tb';
-import { useLocation } from 'react-router-dom';
 import { type ModalType } from '../Header/Header';
 
 interface MobileSidebarProps {
@@ -16,8 +15,8 @@ interface MobileSidebarProps {
 
 const MobileSidebar: FC<MobileSidebarProps> = ({ onCurrentModalChange }) => {
   const boards = useAppSelector((state) => state.boards);
-  const { pathname } = useLocation();
   const toggleMode = useDarkMode();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="flex min-h-full justify-center p-4">
@@ -30,12 +29,12 @@ const MobileSidebar: FC<MobileSidebarProps> = ({ onCurrentModalChange }) => {
             all boards ({boards.length})
           </h3>
           <nav className="flex-1 overflow-y-auto overflow-x-hidden">
-            {boards.map(({ name }) => (
+            {boards.map(({ boardID, name, isActive }) => (
               <MenuListItem
                 value={name}
-                link={transformToKebabCase(name)}
-                isActive={pathname.substring(1) === transformToKebabCase(name)}
+                isActive={isActive}
                 key={name}
+                onClick={() => dispatch(boardActivated({ boardID }))}
               />
             ))}
           </nav>

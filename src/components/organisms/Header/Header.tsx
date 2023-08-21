@@ -7,10 +7,8 @@ import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { boardDeleted } from '@/store/slices/boardsSlice';
-import { transformToPascalCase } from '@/utility';
 import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 import BoardModal from '../BoardModal/BoardModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
@@ -26,14 +24,12 @@ export type ModalType =
 
 const Header = () => {
   const tabletMatches = useMediaQuery('(min-width: 768px)');
-  const { pathname } = useLocation();
-  const boardName = transformToPascalCase(pathname);
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
   const [currentModal, setCurrentModal] = useState<ModalType>('create-task');
   const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
-    state.boards.find((board) => board.name === boardName)
+    state.boards.find(({ isActive }) => isActive)
   );
 
   if (!board) {
@@ -70,7 +66,7 @@ const Header = () => {
     handleOpenModal();
   };
 
-  const deleteBoardDescription = `Are you sure you want to delete the ‘${boardName}’ board? This action will remove all columns and tasks and cannot be reversed.`;
+  const deleteBoardDescription = `Are you sure you want to delete the ‘${board.name}’ board? This action will remove all columns and tasks and cannot be reversed.`;
 
   return (
     <>
@@ -89,7 +85,7 @@ const Header = () => {
             <img className="mr-4 md:hidden" src={logoImage} alt="logo" />
 
             <h2 className="text-lg font-bold text-primaryBlack dark:text-primaryWhite md:ml-6 md:text-xl">
-              {boardName}
+              {board.name}
             </h2>
 
             <button
@@ -117,7 +113,9 @@ const Header = () => {
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        {currentModal === 'mobile-sidebar' && <MobileSidebar onCurrentModalChange={setCurrentModal} />}
+        {currentModal === 'mobile-sidebar' && (
+          <MobileSidebar onCurrentModalChange={setCurrentModal} />
+        )}
         {currentModal === 'create-task' && (
           <TaskModal type="create" title="Add New Task" />
         )}
@@ -128,7 +126,7 @@ const Header = () => {
           <DeleteModal
             title="Delete this board?"
             description={deleteBoardDescription}
-            onDelete={() => dispatch(boardDeleted({ boardName }))}
+            onDelete={() => dispatch(boardDeleted({ boardName: board.name }))}
             onCancel={handleCloseModal}
           />
         )}

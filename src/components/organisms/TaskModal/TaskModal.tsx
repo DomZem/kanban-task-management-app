@@ -7,12 +7,10 @@ import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { subtaskAdded } from '@/store/slices/subtasksSlice';
 import { taskAdded } from '@/store/slices/tasksSlice';
 import { type ITask } from '@/types';
-import { transformToPascalCase } from '@/utility';
 import { Dialog } from '@headlessui/react';
 import { nanoid } from '@reduxjs/toolkit';
 import { useState, type FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
 
 interface CreateTaskModalProps {
   title: string;
@@ -35,10 +33,9 @@ interface TaskFormValues {
 
 const TaskModal: FC<TaskModalProps> = (props) => {
   const dispatch = useAppDispatch();
-  const { pathname } = useLocation();
 
   const board = useAppSelector((state) =>
-    state.boards.find((board) => board.name === transformToPascalCase(pathname))
+    state.boards.find(({ isActive }) => isActive)
   );
 
   if (!board) {
