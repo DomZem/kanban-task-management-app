@@ -66,6 +66,11 @@ const Header = () => {
     handleOpenModal();
   };
 
+  const handleDeleteBoard = () => {
+    dispatch(boardDeleted(board));
+    handleCloseModal();
+  };
+
   const deleteBoardDescription = `Are you sure you want to delete the ‘${board.name}’ board? This action will remove all columns and tasks and cannot be reversed.`;
 
   return (
@@ -126,7 +131,7 @@ const Header = () => {
           <DeleteModal
             title="Delete this board?"
             description={deleteBoardDescription}
-            onDelete={() => dispatch(boardDeleted({ boardName: board.name }))}
+            onDelete={handleDeleteBoard}
             onCancel={handleCloseModal}
           />
         )}

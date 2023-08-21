@@ -51,15 +51,18 @@ export const boardsSlice = createSlice({
         };
       },
     },
-    boardDeleted: (state, action: PayloadAction<{ boardName: string }>) => {
-      const { boardName } = action.payload;
+    boardDeleted: (state, action: PayloadAction<IBoard>) => {
+      const { boardID } = action.payload;
       const indexToRemove = state.findIndex(
-        (board) => board.name === boardName
+        (board) => board.boardID === boardID
       );
 
       if (indexToRemove !== -1) {
         state.splice(indexToRemove, 1);
       }
+
+      // If the deleted board was active, make the first board active
+      state[state.length - 1].isActive = true;
     },
   },
 });
