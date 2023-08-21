@@ -6,21 +6,8 @@ export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    taskAdded: {
-      reducer(state, action: PayloadAction<ITask>) {
-        state.push(action.payload);
-      },
-      prepare(taskID, title, description, status, boardID) {
-        return {
-          payload: {
-            taskID,
-            title,
-            description,
-            status,
-            boardID,
-          },
-        };
-      },
+    taskAdded: (state, action: PayloadAction<ITask>) => {
+      state.push(action.payload);
     },
     taskStatusUpdated: (
       state,

@@ -41,7 +41,6 @@ export const boardsSlice = createSlice({
       if (existingBoard) {
         existingBoard.name = name;
         [...existingBoard.statuses] = [...statuses];
-        console.log('Done');
       }
     },
     boardDeleted: (state) => {

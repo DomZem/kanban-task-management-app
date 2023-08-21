@@ -18,8 +18,9 @@ const App = () => {
   const [selectedTaskID, setSelectedTaskID] = useState<string>('');
   const tabletMatches = useMediaQuery('(min-width: 768px)');
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
-  const [isTaskToDelete, setIsTaskToDelete] = useState<boolean>(false);
-  const [isTaskToEdit, setIsTaskToEdit] = useState<boolean>(false);
+  const [taskAction, setTaskAction] = useState<'view' | 'edit' | 'delete'>(
+    'view'
+  );
   const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
@@ -39,8 +40,13 @@ const App = () => {
   const statuses = board.statuses;
 
   const handleCancelModal = () => {
-    setIsTaskToEdit(false);
-    setIsTaskToDelete(false);
+    setTaskAction('view');
+    handleCloseModal();
+  };
+
+  const handleDeleteTask = () => {
+    dispatch(taskDeleted({ taskID: selectedTaskID }));
+    setTaskAction('delete');
     handleCloseModal();
   };
 
@@ -98,31 +104,24 @@ const App = () => {
         </div>
       </div>
       <Modal isOpen={isOpen} onCloseModal={handleCancelModal}>
-        {!isTaskToDelete && !isTaskToEdit && (
+        {taskAction === 'view' && (
           <ViewTaskModal
             taskID={selectedTaskID}
-            handleTaskDelete={() => setIsTaskToDelete(true)}
-            handleTaskEdit={() => setIsTaskToEdit(true)}
+            handleTaskDelete={() => setTaskAction('delete')}
+            handleTaskEdit={() => setTaskAction('edit')}
           />
         )}
 
-        {isTaskToEdit && (
+        {taskAction === 'edit' && (
           <TaskModal type="edit" title="Edit Task" task={task} />
         )}
 
-        {isTaskToDelete && (
+        {taskAction === 'delete' && (
           <DeleteModal
             title="Delete this task?"
             description={`Are you sure you want to delete the ‘${task?.title}’ task and its subtasks? This action cannot be reversed.`}
-            onDelete={() => {
-              dispatch(taskDeleted({ taskID: selectedTaskID }));
-              setIsTaskToDelete(false);
-              handleCloseModal();
-            }}
-            onCancel={() => {
-              handleCloseModal();
-              setIsTaskToDelete(false);
-            }}
+            onDelete={handleDeleteTask}
+            onCancel={handleCancelModal}
           />
         )}
       </Modal>

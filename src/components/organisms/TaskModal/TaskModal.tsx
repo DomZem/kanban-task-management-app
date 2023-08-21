@@ -12,18 +12,18 @@ import { nanoid } from '@reduxjs/toolkit';
 import { useState, type FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-interface CreateTaskModalProps {
+interface TaskAddModalProps {
   title: string;
-  type: 'create';
+  type: 'add';
 }
 
-interface EditTaskModalProps {
+interface TaskEditModalProps {
   title: string;
   type: 'edit';
   task: ITask;
 }
 
-type TaskModalProps = CreateTaskModalProps | EditTaskModalProps;
+type TaskModalProps = TaskAddModalProps | TaskEditModalProps;
 
 interface TaskFormValues {
   title: string;
@@ -39,24 +39,20 @@ const TaskModal: FC<TaskModalProps> = (props) => {
   );
 
   if (!board) {
-    return null;
+    return <div>Something went wrong. Board not found!</div>;
   }
 
-  const columns = board.columns;
+  const statuses = board.statuses;
 
-  const initialselectedStatus =
-    props.type === 'edit'
-      ? columns.find((column) => column === props.task.status) ?? columns[0]
-      : columns[0];
+  const initialSelectedStatus = statuses[0];
 
-  const [selectedStatus, setSelectedStatus] = useState(initialselectedStatus);
+  const [selectedStatus, setSelectedStatus] = useState(initialSelectedStatus);
 
   let initialSubtasks: Array<{ title: string }> = [{ title: '' }];
 
   if (props.type === 'edit') {
-    const { task } = props;
     initialSubtasks = useAppSelector((state) =>
-      state.subtasks.filter((subtask) => subtask.taskID === task.taskID)
+      state.subtasks.filter((subtask) => subtask.taskID === props.task.taskID)
     );
   }
 
@@ -65,6 +61,7 @@ const TaskModal: FC<TaskModalProps> = (props) => {
     formState: { errors },
     control,
     handleSubmit,
+    reset,
   } = useForm<TaskFormValues>({
     defaultValues: {
       title: `${props.type === 'edit' ? props.task.title : ''}`,
@@ -79,18 +76,29 @@ const TaskModal: FC<TaskModalProps> = (props) => {
   });
 
   const onSubmit = ({ title, description, subtasks }: TaskFormValues) => {
-    // We need to create taskID there, because next we will be use it to create subtask. That's why we don't create taskID inside reducer.
-    const taskID = nanoid();
+    if (props.type === 'add') {
+      // We need to create taskID there, because next we will be use it to create subtask. That's why we don't create taskID inside reducer.
+      const taskID = nanoid();
 
-    // Send task to store
-    dispatch(
-      taskAdded(taskID, title, description, selectedStatus, board.boardID)
-    );
+      // Send task to store
+      dispatch(
+        taskAdded({
+          taskID,
+          title,
+          description,
+          statusID: selectedStatus.statusID,
+          boardID: board.boardID,
+        })
+      );
 
-    // Send subtasks to store
-    subtasks.forEach(({ title }) => {
-      dispatch(subtaskAdded(title, taskID));
-    });
+      // Send subtasks to store
+      subtasks.forEach(({ title }) => {
+        dispatch(subtaskAdded(title, taskID));
+      });
+
+      // Clear form fields
+      reset();
+    }
   };
 
   return (
@@ -157,14 +165,14 @@ const TaskModal: FC<TaskModalProps> = (props) => {
             Status
           </label>
           <Select
-            options={columns}
+            options={statuses}
             selected={selectedStatus}
             onChange={setSelectedStatus}
           />
         </section>
 
         <PrimaryButton type="submit">
-          {props.type === 'create' ? 'Create Task' : 'Save Changes'}
+          {props.type === 'add' ? 'Create Task' : 'Save Changes'}
         </PrimaryButton>
       </Dialog.Panel>
     </div>

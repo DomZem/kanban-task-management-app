@@ -122,7 +122,7 @@ const Header = () => {
           <MobileSidebar onCurrentModalChange={setCurrentModal} />
         )}
         {currentModal === 'create-task' && (
-          <TaskModal type="create" title="Add New Task" />
+          <TaskModal type="add" title="Add New Task" />
         )}
         {currentModal === 'edit-board' && (
           <BoardModal type="edit" title="Edit Board" />

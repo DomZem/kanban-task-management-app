@@ -1,11 +1,12 @@
+import { type IStatus } from '@/types';
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, type FC } from 'react';
 import { HiOutlineChevronDown } from 'react-icons/hi';
 
 interface SelectProps {
-  options: string[];
-  selected: string;
-  onChange: (value: React.SetStateAction<string>) => void;
+  options: IStatus[];
+  selected: IStatus;
+  onChange: (value: React.SetStateAction<IStatus>) => void;
   onCustomAction?: () => void;
 }
 
@@ -15,7 +16,7 @@ const Select: FC<SelectProps> = ({
   onChange,
   onCustomAction,
 }) => {
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: IStatus) => {
     onChange(value);
     onCustomAction?.();
   };
@@ -25,7 +26,7 @@ const Select: FC<SelectProps> = ({
       <Listbox value={selected} onChange={handleSelectChange}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-pointer rounded border border-primaryBorder bg-white py-2 pl-3 pr-10 text-left focus:outline-none dark:bg-primaryDarkGrey dark:text-primaryWhite">
-            <span className="block truncate">{selected}</span>
+            <span className="block truncate">{selected.name}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <HiOutlineChevronDown className="text-base text-primaryPurple" />
             </span>
@@ -37,9 +38,9 @@ const Select: FC<SelectProps> = ({
             leaveTo="opacity-0"
           >
             <Listbox.Options className="absolute mt-2 flex max-h-60 w-full flex-col gap-y-2 overflow-auto rounded border border-primaryBorder bg-white p-4 text-base shadow-lg focus:outline-none dark:border-none dark:bg-primaryVeryDarkGrey">
-              {options.map((option, optionIdx) => (
+              {options.map((option) => (
                 <Listbox.Option
-                  key={optionIdx}
+                  key={option.statusID}
                   className={({ active }) =>
                     `relative cursor-pointer select-none font-medium duration-100 ${
                       active
@@ -49,7 +50,7 @@ const Select: FC<SelectProps> = ({
                   }
                   value={option}
                 >
-                  {option}
+                  {option.name}
                 </Listbox.Option>
               ))}
             </Listbox.Options>
