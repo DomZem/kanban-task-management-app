@@ -4,9 +4,13 @@ import Select from '@/components/atoms/Select/Select';
 import Textarea from '@/components/atoms/Textarea/Textarea';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { subtaskAdded } from '@/store/slices/subtasksSlice';
-import { taskAdded } from '@/store/slices/tasksSlice';
-import { type ITask } from '@/types';
+import {
+  subtaskAdded,
+  subtaskDeleted,
+  subtaskEdited,
+} from '@/store/slices/subtasksSlice';
+import { taskAdded, taskEdited } from '@/store/slices/tasksSlice';
+import { type ISubtask, type ITask } from '@/types';
 import { Dialog } from '@headlessui/react';
 import { nanoid } from '@reduxjs/toolkit';
 import { useState, type FC } from 'react';
@@ -28,7 +32,7 @@ type TaskModalProps = TaskAddModalProps | TaskEditModalProps;
 interface TaskFormValues {
   title: string;
   description: string;
-  subtasks: Array<{ title: string }>;
+  subtasks: ISubtask[];
 }
 
 const TaskModal: FC<TaskModalProps> = (props) => {
@@ -44,11 +48,19 @@ const TaskModal: FC<TaskModalProps> = (props) => {
 
   const statuses = board.statuses;
 
-  const initialSelectedStatus = statuses[0];
+  let initialSelectedStatus = statuses[0];
 
+  if (props.type === 'edit') {
+    initialSelectedStatus =
+      board.statuses.find(
+        (status) => status.statusID === props.task.statusID
+      ) ?? statuses[0];
+  }
   const [selectedStatus, setSelectedStatus] = useState(initialSelectedStatus);
 
-  let initialSubtasks: Array<{ title: string }> = [{ title: '' }];
+  let initialSubtasks: ISubtask[] = [
+    { subtaskID: nanoid(), title: '', isComplete: false, taskID: '' },
+  ];
 
   if (props.type === 'edit') {
     initialSubtasks = useAppSelector((state) =>
@@ -92,12 +104,48 @@ const TaskModal: FC<TaskModalProps> = (props) => {
       );
 
       // Send subtasks to store
-      subtasks.forEach(({ title }) => {
-        dispatch(subtaskAdded(title, taskID));
+      subtasks.forEach((subtask) => {
+        dispatch(subtaskAdded({ ...subtask, taskID }));
       });
 
       // Clear form fields
       reset();
+    } else if (props.type === 'edit') {
+      // Send edited task data to store
+      dispatch(
+        taskEdited({
+          ...props.task,
+          title,
+          description,
+          statusID: selectedStatus.statusID,
+        })
+      );
+
+      // Subtasks to add which are different than initial
+      const subtasksToAdd = subtasks.filter(
+        ({ subtaskID: id1 }) =>
+          !initialSubtasks.some(({ subtaskID: id2 }) => id2 === id1)
+      );
+
+      subtasksToAdd.forEach((subtask) =>
+        dispatch(subtaskAdded({ ...subtask, taskID: props.task.taskID }))
+      );
+
+      // Subtasks to delete which are different than initial
+      const subtasksToDelete = initialSubtasks.filter(
+        ({ subtaskID: id1 }) =>
+          !subtasks.some(({ subtaskID: id2 }) => id2 === id1)
+      );
+
+      subtasksToDelete.forEach((subtask) => dispatch(subtaskDeleted(subtask)));
+
+      // The rest of subtasks to update
+      const subtasksToEdit = subtasks.filter(
+        ({ subtaskID: id1 }) =>
+          !subtasksToDelete.some(({ subtaskID: id2 }) => id2 === id1)
+      );
+
+      subtasksToEdit.forEach((subtask) => dispatch(subtaskEdited(subtask)));
     }
   };
 
@@ -155,7 +203,14 @@ const TaskModal: FC<TaskModalProps> = (props) => {
         <PrimaryButton
           type="button"
           version="LightPurple"
-          onClick={() => append({ title: '' })}
+          onClick={() =>
+            append({
+              subtaskID: nanoid(),
+              title: '',
+              isComplete: false,
+              taskID: '',
+            })
+          }
         >
           + Add New Subtask
         </PrimaryButton>

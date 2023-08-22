@@ -9,14 +9,16 @@ export const tasksSlice = createSlice({
     taskAdded: (state, action: PayloadAction<ITask>) => {
       state.push(action.payload);
     },
-    taskStatusUpdated: (
-      state,
-      action: PayloadAction<{ taskID: string; status: string }>
-    ) => {
-      const { taskID, status } = action.payload;
+    taskEdited: (state, action: PayloadAction<ITask>) => {
+      const { taskID, title, description, statusID } = action.payload;
+
       const existingTask = state.find((task) => task.taskID === taskID);
+
+      // Update task data
       if (existingTask) {
-        existingTask.status = status;
+        existingTask.title = title;
+        existingTask.description = description;
+        existingTask.statusID = statusID;
       }
     },
     taskDeleted: (state, action: PayloadAction<{ taskID: string }>) => {
@@ -31,6 +33,6 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const { taskAdded, taskStatusUpdated, taskDeleted } = tasksSlice.actions;
+export const { taskAdded, taskEdited, taskDeleted } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

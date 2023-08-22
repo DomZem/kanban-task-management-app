@@ -17,8 +17,8 @@ const Select: FC<SelectProps> = ({
   onCustomAction,
 }) => {
   const handleSelectChange = (value: IStatus) => {
-    onChange(value);
     onCustomAction?.();
+    onChange(value);
   };
 
   return (

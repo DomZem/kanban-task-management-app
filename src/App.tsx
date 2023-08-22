@@ -46,8 +46,7 @@ const App = () => {
 
   const handleDeleteTask = () => {
     dispatch(taskDeleted({ taskID: selectedTaskID }));
-    setTaskAction('delete');
-    handleCloseModal();
+    handleCancelModal();
   };
 
   return (

@@ -3,8 +3,8 @@ import EllipsisMenu, {
   type EllipsisMenuItem,
 } from '@/components/molecules/EllipsisMenu/EllipsisMenu';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { subtaskCompleteStatusUpdated } from '@/store/slices/subtasksSlice';
-import { taskStatusUpdated } from '@/store/slices/tasksSlice';
+import { subtaskEdited } from '@/store/slices/subtasksSlice';
+import { taskEdited } from '@/store/slices/tasksSlice';
 import { Dialog } from '@headlessui/react';
 import { useState, type FC } from 'react';
 
@@ -37,21 +37,18 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
     return <div>Something went wrong try maybe later!</div>;
   }
 
-  const [selectedCurrentStatus, setSelectedCurrentStatus] = useState(
-    task.status
-  );
+  const statuses = board.statuses;
+
+  const initialSelectedStatus =
+    board.statuses.find((status) => status.statusID === task.statusID) ??
+    statuses[0];
+
+  const [selectedStatus, setSelectedStatus] = useState(initialSelectedStatus);
 
   const subtasksCount = subtasks.length;
   const completedSubtasksCount = subtasks.filter(
     (subtask) => subtask.isComplete
   ).length;
-
-  const handleSubtaskCheckboxChange = (
-    subtaskID: string,
-    isComplete: boolean
-  ) => {
-    dispatch(subtaskCompleteStatusUpdated({ subtaskID, isComplete }));
-  };
 
   const ellipsisMenuList: EllipsisMenuItem[] = [
     {
@@ -91,28 +88,33 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
             Subtasks ({completedSubtasksCount} of {subtasksCount})
           </p>
           <ul className="mt-4 flex flex-col gap-y-2">
-            {subtasks.map(({ subtaskID, title, isComplete }) => (
+            {subtasks.map((subtask) => (
               <li
-                key={subtaskID}
+                key={subtask.subtaskID}
                 className="flex items-center gap-x-4 rounded bg-primaryLightGrey p-3 duration-200 hover:bg-[#635FC7]/25 dark:bg-primaryVeryDarkGrey hover:dark:bg-[#635FC7]/25"
               >
                 <input
                   type="checkbox"
                   className="cursor-pointer"
-                  id={subtaskID}
-                  checked={isComplete}
+                  id={subtask.subtaskID}
+                  checked={subtask.isComplete}
                   onChange={() => {
-                    handleSubtaskCheckboxChange(subtaskID, !isComplete);
+                    dispatch(
+                      subtaskEdited({
+                        ...subtask,
+                        isComplete: !subtask.isComplete,
+                      })
+                    );
                   }}
                 />
                 <label
-                  htmlFor={subtaskID}
+                  htmlFor={subtask.subtaskID}
                   className={`text-xs font-bold text-primaryBlack duration-200 dark:text-primaryWhite ${
-                    isComplete &&
+                    subtask.isComplete &&
                     'text-black/50 line-through dark:text-[#fff]/50'
                   }`}
                 >
-                  {title}
+                  {subtask.title}
                 </label>
               </li>
             ))}
@@ -124,12 +126,15 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
             Current status
           </label>
           <Select
-            options={board.columns}
-            selected={selectedCurrentStatus}
-            onChange={setSelectedCurrentStatus}
+            options={statuses}
+            selected={selectedStatus}
+            onChange={setSelectedStatus}
             onCustomAction={() => {
               dispatch(
-                taskStatusUpdated({ taskID, status: selectedCurrentStatus })
+                taskEdited({
+                  ...task,
+                  statusID: selectedStatus.statusID,
+                })
               );
             }}
           />

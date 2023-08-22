@@ -1,42 +1,43 @@
 import { initialState } from '@/data/subtasks';
 import { type ISubtask } from '@/types';
-import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export const subtasksSlice = createSlice({
   name: 'subtasks',
   initialState,
   reducers: {
-    subtaskAdded: {
-      reducer(state, action: PayloadAction<ISubtask>) {
-        state.push(action.payload);
-      },
-      prepare(title, taskID) {
-        return {
-          payload: {
-            subtaskID: nanoid(),
-            title,
-            isComplete: false,
-            taskID,
-          },
-        };
-      },
+    subtaskAdded: (state, action: PayloadAction<ISubtask>) => {
+      state.push(action.payload);
     },
-    subtaskCompleteStatusUpdated: (
-      state,
-      action: PayloadAction<{ subtaskID: string; isComplete: boolean }>
-    ) => {
-      const { subtaskID, isComplete } = action.payload;
+    subtaskEdited: (state, action: PayloadAction<ISubtask>) => {
+      const { subtaskID, title, isComplete } = action.payload;
+
       const existingSubtask = state.find(
         (subtask) => subtask.subtaskID === subtaskID
       );
+
       if (existingSubtask) {
+        existingSubtask.title = title;
         existingSubtask.isComplete = isComplete;
+      }
+    },
+    subtaskDeleted: (state, action: PayloadAction<ISubtask>) => {
+      const { subtaskID } = action.payload;
+
+      const existingSubtask = state.find(
+        (subtask) => subtask.subtaskID === subtaskID
+      );
+
+      if (existingSubtask) {
+        return state.filter(
+          (subtask) => subtask.subtaskID !== existingSubtask.subtaskID
+        );
       }
     },
   },
 });
 
-export const { subtaskAdded, subtaskCompleteStatusUpdated } =
+export const { subtaskAdded, subtaskEdited, subtaskDeleted } =
   subtasksSlice.actions;
 
 export default subtasksSlice.reducer;
