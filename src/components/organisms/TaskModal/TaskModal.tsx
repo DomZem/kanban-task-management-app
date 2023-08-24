@@ -1,5 +1,5 @@
+import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
-import PrimaryButton from '@/components/atoms/PrimaryButton/PrimaryButton';
 import Select from '@/components/atoms/Select/Select';
 import Textarea from '@/components/atoms/Textarea/Textarea';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
@@ -200,9 +200,9 @@ const TaskModal: FC<TaskModalProps> = (props) => {
           </ul>
         </section>
 
-        <PrimaryButton
+        <Button
           type="button"
-          version="LightPurple"
+          color="lightPurple"
           onClick={() =>
             append({
               subtaskID: nanoid(),
@@ -213,7 +213,7 @@ const TaskModal: FC<TaskModalProps> = (props) => {
           }
         >
           + Add New Subtask
-        </PrimaryButton>
+        </Button>
 
         <section>
           <label className="label" htmlFor="status">
@@ -226,9 +226,9 @@ const TaskModal: FC<TaskModalProps> = (props) => {
           />
         </section>
 
-        <PrimaryButton type="submit">
+        <Button type="submit">
           {props.type === 'add' ? 'Create Task' : 'Save Changes'}
-        </PrimaryButton>
+        </Button>
       </Dialog.Panel>
     </div>
   );

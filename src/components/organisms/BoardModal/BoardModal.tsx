@@ -1,5 +1,5 @@
+import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
-import PrimaryButton from '@/components/atoms/PrimaryButton/PrimaryButton';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { boardAdded, boardEdited } from '@/store/slices/boardsSlice';
@@ -106,17 +106,17 @@ const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
           </ul>
         </section>
 
-        <PrimaryButton
+        <Button
           type="button"
-          version="LightPurple"
+          color='lightPurple'
           onClick={() => append({ statusID: nanoid(), name: '' })}
         >
           + Add New Column
-        </PrimaryButton>
+        </Button>
 
-        <PrimaryButton type="submit">
+        <Button type="submit">
           {type === 'add' ? 'Create New Board' : 'Save changes'}
-        </PrimaryButton>
+        </Button>
       </Dialog.Panel>
     </div>
   );

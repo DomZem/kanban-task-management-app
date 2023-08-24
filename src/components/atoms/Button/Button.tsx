@@ -1,22 +1,38 @@
-import { type ButtonHTMLAttributes, type FC } from 'react';
+import React, { type ButtonHTMLAttributes, type FC } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  version?: 'primary' | 'secondary' | 'destructive';
+  version?: 'primary' | 'secondary';
+  color?: 'purple' | 'lightPurple' | 'red';
+  className?: string;
 }
 
 const Button: FC<ButtonProps> = ({
+  color = 'purple',
   version = 'primary',
+  disabled,
   children,
+  className,
   ...props
 }) => (
   <button
-    className={`${
-      version === 'primary'
-        ? 'bg-primaryPurple hover:bg-primaryPurpleHover'
-        : 'bg-primaryRed hover:bg-primaryRedHover'
-    } flex items-center gap-x-1 rounded-3xl px-5 py-3 font-medium text-primaryWhite duration-200`}
     {...props}
+    disabled={disabled}
+    className={`
+    ${
+      version === 'primary'
+        ? 'rounded-[20px] p-2 text-[13px] leading-[176.923%]'
+        : 'flex items-center rounded-3xl px-6 py-[14px] text-[15px] leading-normal'
+    }
+    ${
+      color === 'purple'
+        ? 'bg-primaryPurple text-primaryWhite hover:bg-primaryPurpleHover'
+        : color === 'lightPurple'
+        ? 'bg-primaryLightPurple text-primaryPurple hover:bg-primaryLightPurpleHover dark:bg-primaryWhite'
+        : 'bg-primaryRed text-primaryWhite hover:bg-primaryRedHover'
+    } font-bold outline-none duration-200 ${
+      disabled && 'opacity-50'
+    } ${className}`}
   >
     {children}
   </button>

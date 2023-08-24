@@ -1,4 +1,4 @@
-import PrimaryButton from '@/components/atoms/PrimaryButton/PrimaryButton';
+import Button from '@/components/atoms/Button/Button';
 import { Dialog } from '@headlessui/react';
 import { type FC } from 'react';
 
@@ -29,16 +29,12 @@ const DeleteModal: FC<DeleteModalProps> = ({
       </Dialog.Description>
 
       <section className="flex gap-x-4">
-        <PrimaryButton className="flex-1" version="Red" onClick={onDelete}>
+        <Button className="flex-1" color="red" onClick={onDelete}>
           Delete
-        </PrimaryButton>
-        <PrimaryButton
-          version="LightPurple"
-          className="flex-1"
-          onClick={onCancel}
-        >
+        </Button>
+        <Button className="flex-1" color="lightPurple" onClick={onCancel}>
           Cancel
-        </PrimaryButton>
+        </Button>
       </section>
     </Dialog.Panel>
   </div>

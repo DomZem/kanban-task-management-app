@@ -25,6 +25,12 @@ export default {
         task: '0px 4px 6px 0px rgba(54, 78, 126, 0.10);',
         elipsisMenu: '0px 10px 20px 0px rgba(54, 78, 126, 0.25);',
       },
+      backgroundImage: {
+        addNewColumn:
+          'linear-gradient(180deg, #E9EFFA 0%, rgba(233, 239, 250, 0.50) 100%)',
+        addNewColumnDark:
+          'linear-gradient(180deg, rgba(43, 44, 55, 0.25) 0%, rgba(43, 44, 55, 0.13) 100%)',
+      },
     },
   },
   plugins: [],

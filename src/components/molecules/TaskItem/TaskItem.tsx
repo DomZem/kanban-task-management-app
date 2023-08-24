@@ -22,7 +22,7 @@ const Task: FC<TaskProps> = ({ title, description, onClick }) => {
           isHover
             ? 'text-primaryPurple'
             : 'text-primaryBlack dark:text-primaryWhite'
-        } text-base font-bold duration-200 ease-linear`}
+        } text-base font-bold`}
       >
         {title}
       </h4>

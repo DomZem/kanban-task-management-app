@@ -108,7 +108,11 @@ const Header = () => {
               <MdAdd className="text-xl text-primaryWhite" />
             </button>
           ) : (
-            <Button onClick={() => openModal('create-task')}>
+            <Button
+              version="secondary"
+              disabled={board.statuses.length === 0}
+              onClick={() => openModal('create-task')}
+            >
               <MdAdd className="text-xl text-primaryWhite" />
               Add New Task
             </Button>
