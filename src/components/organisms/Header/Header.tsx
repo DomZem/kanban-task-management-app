@@ -6,7 +6,7 @@ import EllipsisMenu, {
 import Modal from '@/components/templates/Modal/Modal';
 import useModal from '@/components/templates/Modal/useModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { boardDeleted } from '@/store/slices/boardsSlice';
+import { boardDeleted, selectActiveBoard } from '@/store/slices/boardsSlice';
 import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useMediaQuery } from 'usehooks-ts';
@@ -28,9 +28,7 @@ const Header = () => {
   const [currentModal, setCurrentModal] = useState<ModalType>('create-task');
   const dispatch = useAppDispatch();
 
-  const board = useAppSelector((state) =>
-    state.boards.find(({ isActive }) => isActive)
-  );
+  const board = useAppSelector(selectActiveBoard);
 
   if (!board) {
     return null;

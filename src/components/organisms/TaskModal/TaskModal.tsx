@@ -5,6 +5,7 @@ import Textarea from '@/components/atoms/Textarea/Textarea';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import {
+  selectSubtasksByTaskID,
   subtaskAdded,
   subtaskDeleted,
   subtaskEdited,
@@ -64,7 +65,7 @@ const TaskModal: FC<TaskModalProps> = (props) => {
 
   if (props.type === 'edit') {
     initialSubtasks = useAppSelector((state) =>
-      state.subtasks.filter((subtask) => subtask.taskID === props.task.taskID)
+      selectSubtasksByTaskID(state, props.task.taskID)
     );
   }
 

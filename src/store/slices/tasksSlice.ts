@@ -1,6 +1,10 @@
 import { initialState } from '@/data/tasks';
 import { type ITask } from '@/types';
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 
 export const tasksSlice = createSlice({
   name: 'tasks',
@@ -34,5 +38,12 @@ export const tasksSlice = createSlice({
 });
 
 export const { taskAdded, taskEdited, taskDeleted } = tasksSlice.actions;
+
+export const selectAllTasks = (state: any) => state.tasks;
+
+export const selectTasksByBoardID = createSelector(
+  [selectAllTasks, (state, boardID) => boardID],
+  (tasks, boardID) => tasks.filter((task: ITask) => task.boardID === boardID)
+);
 
 export default tasksSlice.reducer;

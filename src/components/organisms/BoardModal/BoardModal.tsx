@@ -2,7 +2,11 @@ import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { boardAdded, boardEdited } from '@/store/slices/boardsSlice';
+import {
+  boardAdded,
+  boardEdited,
+  selectActiveBoard,
+} from '@/store/slices/boardsSlice';
 import { type IStatus } from '@/types';
 import { Dialog } from '@headlessui/react';
 import { nanoid } from '@reduxjs/toolkit';
@@ -22,9 +26,7 @@ interface BoardFormValues {
 const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
   const dispatch = useAppDispatch();
 
-  const board = useAppSelector((state) =>
-    state.boards.find(({ isActive }) => isActive)
-  );
+  const board = useAppSelector(selectActiveBoard);
 
   if (!board) {
     return <div>Something went wrong. Board not found!</div>;
@@ -108,7 +110,7 @@ const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
 
         <Button
           type="button"
-          color='lightPurple'
+          color="lightPurple"
           onClick={() => append({ statusID: nanoid(), name: '' })}
         >
           + Add New Column

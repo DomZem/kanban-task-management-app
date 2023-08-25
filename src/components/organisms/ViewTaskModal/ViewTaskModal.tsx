@@ -3,8 +3,13 @@ import EllipsisMenu, {
   type EllipsisMenuItem,
 } from '@/components/molecules/EllipsisMenu/EllipsisMenu';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { subtaskEdited } from '@/store/slices/subtasksSlice';
+import { selectActiveBoard } from '@/store/slices/boardsSlice';
+import {
+  selectSubtasksByTaskID,
+  subtaskEdited,
+} from '@/store/slices/subtasksSlice';
 import { taskEdited } from '@/store/slices/tasksSlice';
+import { type IStatus, type ISubtask } from '@/types';
 import { Dialog } from '@headlessui/react';
 import { useState, type FC } from 'react';
 
@@ -25,12 +30,10 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
     state.tasks.find((task) => task.taskID === taskID)
   );
 
-  const board = useAppSelector((state) =>
-    state.boards.find(({ isActive }) => isActive)
-  );
+  const board = useAppSelector(selectActiveBoard);
 
   const subtasks = useAppSelector((state) =>
-    state.subtasks.filter((subtask) => subtask.taskID === taskID)
+    selectSubtasksByTaskID(state, taskID)
   );
 
   if (!board || !task || !subtasks) {
@@ -40,14 +43,15 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
   const statuses = board.statuses;
 
   const initialSelectedStatus =
-    board.statuses.find((status) => status.statusID === task.statusID) ??
-    statuses[0];
+    board.statuses.find(
+      (status: IStatus) => status.statusID === task.statusID
+    ) ?? statuses[0];
 
   const [selectedStatus, setSelectedStatus] = useState(initialSelectedStatus);
 
   const subtasksCount = subtasks.length;
   const completedSubtasksCount = subtasks.filter(
-    (subtask) => subtask.isComplete
+    (subtask: ISubtask) => subtask.isComplete
   ).length;
 
   const ellipsisMenuList: EllipsisMenuItem[] = [
@@ -88,7 +92,7 @@ const ViewTaskModal: FC<ViewTaskModalProps> = ({
             Subtasks ({completedSubtasksCount} of {subtasksCount})
           </p>
           <ul className="mt-4 flex flex-col gap-y-2">
-            {subtasks.map((subtask) => (
+            {subtasks.map((subtask: ISubtask) => (
               <li
                 key={subtask.subtaskID}
                 className="flex items-center gap-x-4 rounded bg-primaryLightGrey p-3 duration-200 hover:bg-[#635FC7]/25 dark:bg-primaryVeryDarkGrey hover:dark:bg-[#635FC7]/25"

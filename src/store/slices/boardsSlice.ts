@@ -1,5 +1,5 @@
 import { initialState } from '@/data/boards';
-import { type IBoard, type IStatus } from '@/types';
+import { type IBoard, type IStatus } from '@/types/index';
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 
 export const boardsSlice = createSlice({
@@ -58,5 +58,8 @@ export const boardsSlice = createSlice({
 
 export const { boardActivated, boardAdded, boardEdited, boardDeleted } =
   boardsSlice.actions;
+
+export const selectActiveBoard = (state: any) =>
+  state.boards.find((board: IBoard) => board.isActive);
 
 export default boardsSlice.reducer;

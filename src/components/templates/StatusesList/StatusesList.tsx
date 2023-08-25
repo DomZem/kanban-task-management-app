@@ -5,7 +5,10 @@ import TaskList from '@/components/organisms/TaskList/TaskList';
 import TaskModal from '@/components/organisms/TaskModal/TaskModal';
 import ViewTaskModal from '@/components/organisms/ViewTaskModal/ViewTaskModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { taskDeleted } from '@/store/slices/tasksSlice';
+import { selectActiveBoard } from '@/store/slices/boardsSlice';
+import { selectAllSubtasks } from '@/store/slices/subtasksSlice';
+import { selectTasksByBoardID, taskDeleted } from '@/store/slices/tasksSlice';
+import { type IStatus, type ITask } from '@/types';
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import Modal from '../Modal/Modal';
@@ -17,8 +20,23 @@ const StatusesList = () => {
   const [currentModal, setCurrentModal] = useState<
     'task-view' | 'task-edit' | 'task-delete' | 'board-edit'
   >('task-view');
-
   const dispatch = useAppDispatch();
+
+  const board = useAppSelector(selectActiveBoard);
+
+  if (!board) {
+    return <div>Something went wrong. Board not found!</div>;
+  }
+
+  const tasks = useAppSelector((state) =>
+    selectTasksByBoardID(state, board.boardID)
+  );
+
+  const task = tasks.find((task: ITask) => task.taskID === selectedTaskID);
+
+  const subtasks = useAppSelector(selectAllSubtasks);
+
+  const statuses = board.statuses;
 
   const handleCancelModal = () => {
     setCurrentModal('task-view');
@@ -35,46 +53,33 @@ const StatusesList = () => {
     handleOpenModal();
   };
 
-  const board = useAppSelector((state) =>
-    state.boards.find(({ isActive }) => isActive)
-  );
-
-  if (!board) {
-    return <div>Something went wrong. Board not found!</div>;
-  }
-
-  const tasks = useAppSelector((state) =>
-    state.tasks.filter((task) => task.boardID === board.boardID)
-  );
-
-  const task = tasks.find((task) => task.taskID === selectedTaskID);
-
-  const subtasks = useAppSelector((state) => state.subtasks);
-
-  const statuses = board.statuses;
-
   if (statuses.length === 0) {
     return (
-      <div className="flex min-h-full items-center justify-center">
-        <div className="flex flex-1 flex-col items-center gap-y-6">
-          <h3 className="text-center text-lg font-medium">
-            This board is empty. Create a new column to get started.
-          </h3>
-          <Button version="secondary" onClick={handleOpenBoardEdit}>
-            <MdAdd className="text-xl text-primaryWhite" />
-            Add New Column
-          </Button>
+      <>
+        <div className="flex min-h-full items-center justify-center">
+          <div className="flex flex-1 flex-col items-center gap-y-6">
+            <h3 className="text-center text-lg font-medium">
+              This board is empty. Create a new column to get started.
+            </h3>
+            <Button version="secondary" onClick={handleOpenBoardEdit}>
+              <MdAdd className="text-xl text-primaryWhite" />
+              Add New Column
+            </Button>
+          </div>
         </div>
-      </div>
+        <Modal isOpen={isOpen} onCloseModal={handleCancelModal}>
+          <BoardModal type="edit" title="Edit Board" />
+        </Modal>
+      </>
     );
   }
 
   return (
     <>
       <ul className="flex min-h-full min-w-fit justify-start gap-x-6">
-        {statuses.map(({ statusID, name }) => {
+        {statuses.map(({ statusID, name }: IStatus) => {
           const taskCount = tasks.filter(
-            (task) => task.statusID === statusID
+            (task: ITask) => task.statusID === statusID
           ).length;
 
           return (
