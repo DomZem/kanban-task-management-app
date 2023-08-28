@@ -7,8 +7,13 @@ import ViewTaskModal from '@/components/organisms/ViewTaskModal/ViewTaskModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { selectActiveBoard } from '@/store/slices/boardsSlice';
 import { selectAllSubtasks } from '@/store/slices/subtasksSlice';
-import { selectTasksByBoardID, taskDeleted } from '@/store/slices/tasksSlice';
+import {
+  selectTasksByBoardID,
+  taskDeleted,
+  taskStatusChanged,
+} from '@/store/slices/tasksSlice';
 import { type IStatus, type ITask } from '@/types';
+import { DndContext, type DragEndEvent } from '@dnd-kit/core';
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import Modal from '../Modal/Modal';
@@ -53,6 +58,17 @@ const StatusesList = () => {
     handleOpenModal();
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { over, active } = event;
+
+    if (over && active) {
+      const taskID = active.id.toString();
+      const statusID = over.id.toString();
+
+      dispatch(taskStatusChanged({ taskID, statusID }));
+    }
+  };
+
   if (statuses.length === 0) {
     return (
       <>
@@ -76,36 +92,40 @@ const StatusesList = () => {
 
   return (
     <>
-      <ul className="flex min-h-full min-w-fit justify-start gap-x-6">
-        {statuses.map(({ statusID, name }: IStatus) => {
-          const taskCount = tasks.filter(
-            (task: ITask) => task.statusID === statusID
-          ).length;
+      <ul className="flex min-h-full min-w-fit justify-start gap-x-4">
+        <DndContext onDragEnd={handleDragEnd}>
+          {statuses.map(({ statusID, name }: IStatus) => {
+            const taskCount = tasks.filter(
+              (task: ITask) => task.statusID === statusID
+            ).length;
 
-          return (
-            <li className="w-[280px]" key={statusID}>
-              <div className="flex items-center gap-x-3">
-                <div
-                  className={`bg- h-4 w-4 rounded-full bg-primaryPurple`}
-                ></div>
-                <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
-                  {name} ({taskCount})
-                </h3>
-              </div>
-              {tasks && (
-                <TaskList
-                  tasks={tasks}
-                  subtasks={subtasks}
-                  column={statusID}
-                  onSetTaskID={setSelectedTaskID}
-                  onOpenModal={handleOpenModal}
-                />
-              )}
-            </li>
-          );
-        })}
+            const filteredTasks = tasks.filter(
+              (task: ITask) => task.statusID === statusID
+            );
+
+            return (
+              <li className="flex w-[288px] flex-col" key={statusID}>
+                <div className="flex items-center gap-x-3 p-1">
+                  <div className="h-4 w-4 rounded-full bg-primaryPurple"></div>
+                  <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
+                    {name} ({taskCount})
+                  </h3>
+                </div>
+                {tasks && (
+                  <TaskList
+                    tasks={filteredTasks}
+                    subtasks={subtasks}
+                    statusID={statusID}
+                    onSetTaskID={setSelectedTaskID}
+                    onOpenModal={handleOpenModal}
+                  />
+                )}
+              </li>
+            );
+          })}
+        </DndContext>
         <li className="min-h-full w-[280px] pt-10">
-          <div className="flex h-full items-center justify-center rounded-md bg-addNewColumn text-primaryMediumGrey duration-200 hover:text-primaryPurple dark:bg-addNewColumnDark">
+          <div className="flex h-full items-center justify-center rounded-md bg-column text-primaryMediumGrey duration-200 hover:text-primaryPurple dark:bg-columnDark">
             <button
               className="flex h-full w-full items-center justify-center text-2xl font-bold"
               onClick={handleOpenBoardEdit}

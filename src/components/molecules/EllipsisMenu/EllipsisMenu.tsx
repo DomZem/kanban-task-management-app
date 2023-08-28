@@ -29,7 +29,7 @@ const EllipsisMenu: FC<EllipsisMenuProps> = ({ items }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-6 flex w-48 origin-top-right flex-col gap-y-4 rounded-md bg-white p-4 text-sm text-primaryMediumGrey shadow-elipsisMenu focus:outline-none dark:bg-primaryVeryDarkGrey">
+        <Menu.Items className="absolute right-0 z-10 mt-6 flex w-48 origin-top-right flex-col gap-y-4 rounded-md bg-white p-4 text-sm text-primaryMediumGrey shadow-elipsisMenu focus:outline-none dark:bg-primaryVeryDarkGrey">
           {items.map((item) => (
             <div key={item.name}>
               <Menu.Item>

@@ -1,11 +1,12 @@
 import TaskItem from '@/components/molecules/TaskItem/TaskItem';
 import { type ISubtask, type ITask } from '@/types';
+import { useDroppable } from '@dnd-kit/core';
 import { type FC } from 'react';
 
 interface TaskListProps {
   tasks: ITask[];
   subtasks: ISubtask[];
-  column: string;
+  statusID: string;
   onSetTaskID: React.Dispatch<React.SetStateAction<string>>;
   onOpenModal: () => void;
 }
@@ -13,13 +14,22 @@ interface TaskListProps {
 const TaskList: FC<TaskListProps> = ({
   tasks,
   subtasks,
-  column,
+  statusID,
   onSetTaskID,
   onOpenModal,
-}) => (
-  <ul className="mt-6 flex flex-col gap-y-5">
-    {tasks.map(({ taskID, title, statusID }) => {
-      if (statusID === column) {
+}) => {
+  const { isOver, setNodeRef } = useDroppable({
+    id: statusID,
+  });
+
+  return (
+    <ul
+      ref={setNodeRef}
+      className={`${
+        isOver ? 'bg-primaryPurple' : ''
+      } mt-4 flex flex-1 flex-col gap-y-5 rounded-xl p-1 duration-200`}
+    >
+      {tasks.map(({ taskID, title }) => {
         const subtasksArr = subtasks.filter(
           (subtask) => subtask.taskID === taskID
         );
@@ -35,16 +45,16 @@ const TaskList: FC<TaskListProps> = ({
 
         return (
           <TaskItem
-            key={taskID}
+            taskID={taskID}
             title={title}
             description={taskDescription}
             onClick={handleOnTaskClick}
+            key={taskID}
           />
         );
-      }
-      return null;
-    })}
-  </ul>
-);
+      })}
+    </ul>
+  );
+};
 
 export default TaskList;

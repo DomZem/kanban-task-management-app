@@ -25,6 +25,19 @@ export const tasksSlice = createSlice({
         existingTask.statusID = statusID;
       }
     },
+    taskStatusChanged: (
+      state,
+      action: PayloadAction<{ taskID: string; statusID: string }>
+    ) => {
+      const { taskID, statusID } = action.payload;
+
+      const existingTask = state.find((task) => task.taskID === taskID);
+
+      // Update task data
+      if (existingTask) {
+        existingTask.statusID = statusID;
+      }
+    },
     taskDeleted: (state, action: PayloadAction<{ taskID: string }>) => {
       const { taskID } = action.payload;
 
@@ -37,7 +50,8 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const { taskAdded, taskEdited, taskDeleted } = tasksSlice.actions;
+export const { taskAdded, taskEdited, taskStatusChanged, taskDeleted } =
+  tasksSlice.actions;
 
 export const selectAllTasks = (state: any) => state.tasks;
 

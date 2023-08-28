@@ -1,28 +1,45 @@
-import { useRef, type FC } from 'react';
-import { useHover } from 'usehooks-ts';
+import { useDraggable } from '@dnd-kit/core';
+import { type FC } from 'react';
+import { MdDragIndicator } from 'react-icons/md';
 
 interface TaskProps {
+  taskID: string;
   title: string;
   description: string;
-  onClick: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  onClick: () => void;
 }
 
-const Task: FC<TaskProps> = ({ title, description, onClick }) => {
-  const hoverRef = useRef(null);
-  const isHover = useHover(hoverRef);
+const Task: FC<TaskProps> = ({ taskID, title, description, onClick }) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: taskID,
+  });
+
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: 100,
+      }
+    : undefined;
 
   return (
     <li
-      ref={hoverRef}
-      className="cursor-pointer rounded-lg bg-primaryWhite px-4 py-6 shadow-task dark:bg-primaryDarkGrey"
+      ref={setNodeRef}
+      {...attributes}
+      className="relative cursor-pointer rounded-lg bg-primaryWhite px-4 py-6 shadow-task transition-shadow duration-200 hover:shadow-taskHover dark:bg-primaryDarkGrey"
+      style={style}
       onClick={onClick}
     >
+      <button
+        className={`absolute right-0 top-0 -translate-x-1/2 translate-y-1/2 p-0.5 ${
+          transform ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
+        {...listeners}
+      >
+        <MdDragIndicator />
+      </button>
+
       <h4
-        className={`mb-2 break-words ${
-          isHover
-            ? 'text-primaryPurple'
-            : 'text-primaryBlack dark:text-primaryWhite'
-        } text-base font-bold`}
+        className={`mb-2 break-words text-base font-bold text-primaryBlack dark:text-primaryWhite`}
       >
         {title}
       </h4>

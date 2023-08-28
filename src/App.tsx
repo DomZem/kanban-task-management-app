@@ -11,7 +11,7 @@ const App = () => {
       <Header />
       <div className="flex overflow-hidden">
         {tabletMatches && <DesktopSidebar />}
-        <main className="flex-1 overflow-y-auto bg-primaryLightGrey p-4 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
+        <main className="flex-1 overflow-y-auto bg-primaryLightGrey px-3 py-5 text-primaryMediumGrey dark:bg-primaryVeryDarkGrey">
           <StatusesList />
         </main>
       </div>
