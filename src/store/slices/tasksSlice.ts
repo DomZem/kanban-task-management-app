@@ -5,13 +5,16 @@ import {
   createSlice,
   type PayloadAction,
 } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
 
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
     taskAdded: (state, action: PayloadAction<ITask>) => {
+      const { title } = action.payload;
       state.push(action.payload);
+      toast.success(`The task '${title}' has been added.`);
     },
     taskEdited: (state, action: PayloadAction<ITask>) => {
       const { taskID, title, description, statusID } = action.payload;
@@ -23,6 +26,7 @@ export const tasksSlice = createSlice({
         existingTask.title = title;
         existingTask.description = description;
         existingTask.statusID = statusID;
+        toast.success(`The task '${title}' has been edited.`);
       }
     },
     taskStatusChanged: (
@@ -41,10 +45,11 @@ export const tasksSlice = createSlice({
     taskDeleted: (state, action: PayloadAction<{ taskID: string }>) => {
       const { taskID } = action.payload;
 
-      const indexToRemove = state.findIndex((task) => task.taskID === taskID);
+      const existingTask = state.find((task) => task.taskID === taskID);
 
-      if (indexToRemove !== -1) {
-        state.splice(indexToRemove, 1);
+      if (existingTask) {
+        toast.success(`The task '${existingTask.title}' has been deleted.`);
+        return state.filter((task) => task.taskID !== existingTask.taskID);
       }
     },
   },

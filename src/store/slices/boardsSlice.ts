@@ -1,6 +1,7 @@
 import { initialState } from '@/data/boards';
 import { type IBoard, type IStatus } from '@/types/index';
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
 
 export const boardsSlice = createSlice({
   name: 'boards',
@@ -19,6 +20,8 @@ export const boardsSlice = createSlice({
     boardAdded: {
       reducer(state, action: PayloadAction<IBoard>) {
         state.push(action.payload);
+        const { name } = action.payload;
+        toast.success(`The board '${name}' has been added.`);
       },
       prepare(name: string, statuses?: IStatus[]) {
         return {
@@ -41,13 +44,17 @@ export const boardsSlice = createSlice({
       if (existingBoard) {
         existingBoard.name = name;
         [...existingBoard.statuses] = [...statuses];
+        toast.success(`The board '${name}' has been edited.`);
       }
     },
-    boardDeleted: (state) => {
+    boardDeleted: (state, action: PayloadAction<IBoard>) => {
+      const { name } = action.payload;
+
       const indexToRemove = state.findIndex(({ isActive }) => isActive);
 
       if (indexToRemove !== -1) {
         state.splice(indexToRemove, 1);
+        toast.success(`The board '${name}' has been deleted.`);
       }
 
       // If the deleted board was active, make the first board active

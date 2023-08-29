@@ -65,7 +65,7 @@ const Header = () => {
   };
 
   const handleDeleteBoard = () => {
-    dispatch(boardDeleted());
+    dispatch(boardDeleted(board));
     handleCloseModal();
   };
 
