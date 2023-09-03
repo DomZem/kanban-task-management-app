@@ -18,12 +18,20 @@
   --primaryRed: #ea5555;
   --primaryRedHover: #ff9898;
   --primaryBorder: #828fa340;
+
+  /* Others */
+  --sidebarTabletWidth: 260px;
+  --sidebarDesktopWidth: 300px;
+
+  --headerMobilePadding: 16px;
+  --headerTabletPadding: 26px;
+  --headerDesktopPadding: 34px;
 }
 
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 500;
+    @apply text-primaryBlack dark:text-primaryWhite;
   }
 
   img {
@@ -45,8 +53,32 @@
   }
 }
 
-@layer components {
+@layer utilities {
+  .body-l {
+    @apply text-[13px] font-medium leading-[23px];
+  }
+
+  .body-m {
+    @apply text-[12px] font-bold leading-[15px];
+  }
+
+  .heading-xl {
+    @apply text-[24px] font-bold leading-[30px];
+  }
+
+  .heading-l {
+    @apply text-[18px] font-bold leading-[23px];
+  }
+
+  .heading-m {
+    @apply text-[15px] font-bold leading-[19px];
+  }
+
+  .heading-s {
+    @apply text-[12px] font-bold leading-[15px] tracking-[2.4px];
+  }
+
   .label {
-    @apply text-xs font-bold text-primaryMediumGrey dark:text-primaryWhite;
+    @apply text-[12px] font-bold leading-normal text-primaryMediumGrey dark:text-primaryWhite;
   }
 }

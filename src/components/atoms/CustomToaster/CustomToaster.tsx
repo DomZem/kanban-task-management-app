@@ -10,6 +10,7 @@ const CustomToaster = () => (
       style: {
         background: '#ffffff',
         color: '#000112',
+        fontSize: 15,
       },
     }}
   />

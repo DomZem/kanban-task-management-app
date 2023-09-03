@@ -17,17 +17,17 @@ const Select: FC<SelectProps> = ({
   onCustomAction,
 }) => {
   const handleSelectChange = (value: IStatus) => {
-    onCustomAction?.();
     onChange(value);
+    onCustomAction?.();
   };
 
   return (
     <div>
       <Listbox value={selected} onChange={handleSelectChange}>
-        <div className="relative mt-1">
-          <Listbox.Button className="relative w-full cursor-pointer rounded border border-primaryBorder bg-white py-2 pl-3 pr-10 text-left focus:outline-none dark:bg-primaryDarkGrey dark:text-primaryWhite">
+        <div className="body-l relative mt-2">
+          <Listbox.Button className="relative w-full cursor-pointer rounded border border-primaryBorder bg-white py-2 pl-4 pr-10 text-left transition-[border] duration-200 hover:border-primaryPurple focus:border-primaryPurple focus:outline-none dark:bg-primaryDarkGrey dark:text-primaryWhite">
             <span className="block truncate">{selected.name}</span>
-            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
               <HiOutlineChevronDown className="text-base text-primaryPurple" />
             </span>
           </Listbox.Button>
@@ -37,7 +37,7 @@ const Select: FC<SelectProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-2 flex max-h-60 w-full flex-col gap-y-2 overflow-auto rounded border border-primaryBorder bg-white p-4 text-base shadow-lg focus:outline-none dark:border-none dark:bg-primaryVeryDarkGrey">
+            <Listbox.Options className="absolute mt-2 flex max-h-60 w-full flex-col gap-y-2 overflow-auto rounded bg-white p-4 shadow-menu focus:outline-none dark:border-none dark:bg-primaryVeryDarkGrey">
               {options.map((option) => (
                 <Listbox.Option
                   key={option.statusID}

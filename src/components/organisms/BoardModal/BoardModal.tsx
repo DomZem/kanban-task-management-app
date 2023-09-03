@@ -1,6 +1,7 @@
 import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
 import InputRemoveField from '@/components/molecules/InputRemoveField/InputRemoveField';
+import { getRandomColor } from '@/data/colors';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import {
   boardAdded,
@@ -33,7 +34,9 @@ const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
   }
 
   const initialStatuses: IStatus[] =
-    type === 'edit' ? board.statuses : [{ statusID: nanoid(), name: '' }];
+    type === 'edit'
+      ? board.statuses
+      : [{ statusID: nanoid(), name: '', color: getRandomColor() }];
 
   const {
     register,
@@ -73,15 +76,11 @@ const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
       >
-        <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
-          {title}
-        </Dialog.Title>
+        <Dialog.Title className="heading-l">{title}</Dialog.Title>
 
         <section>
           <div className="flex flex-col gap-y-2">
-            <label className="text-xs font-bold text-primaryMediumGrey">
-              Board Name
-            </label>
+            <label className="label">Board Name</label>
             <Input
               placeholder="e.g Web Design"
               error={errors.title}
@@ -111,7 +110,9 @@ const BoardModal: FC<BoardModalProps> = ({ title, type }) => {
         <Button
           type="button"
           color="lightPurple"
-          onClick={() => append({ statusID: nanoid(), name: '' })}
+          onClick={() =>
+            append({ statusID: nanoid(), name: '', color: getRandomColor() })
+          }
         >
           + Add New Column
         </Button>

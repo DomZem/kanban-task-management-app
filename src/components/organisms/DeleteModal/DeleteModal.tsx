@@ -20,11 +20,9 @@ const DeleteModal: FC<DeleteModalProps> = ({
       as="div"
       className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
     >
-      <Dialog.Title className="text-lg font-bold text-primaryRed">
-        {title}
-      </Dialog.Title>
+      <Dialog.Title className="heading-l text-primaryRed">{title}</Dialog.Title>
 
-      <Dialog.Description className="text-sm font-medium leading-6 text-primaryMediumGrey">
+      <Dialog.Description className="body-l text-primaryMediumGrey">
         {description}
       </Dialog.Description>
 

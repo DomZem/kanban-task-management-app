@@ -157,7 +157,7 @@ const TaskModal: FC<TaskModalProps> = (props) => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-full max-w-lg flex-col gap-y-6 rounded-md bg-primaryWhite p-6 dark:bg-primaryDarkGrey"
       >
-        <Dialog.Title className="text-lg font-bold dark:text-primaryWhite">
+        <Dialog.Title className="heading-l dark:text-primaryWhite">
           {props.title}
         </Dialog.Title>
 

@@ -1,8 +1,9 @@
 import Button from '@/components/atoms/Button/Button';
 import BoardModal from '@/components/organisms/BoardModal/BoardModal';
 import DeleteModal from '@/components/organisms/DeleteModal/DeleteModal';
-import TaskList from '@/components/organisms/TaskList/TaskList';
 import TaskModal from '@/components/organisms/TaskModal/TaskModal';
+
+import TasksList from '@/components/organisms/TasksList/TasksList';
 import ViewTaskModal from '@/components/organisms/ViewTaskModal/ViewTaskModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { selectActiveBoard } from '@/store/slices/boardsSlice';
@@ -73,8 +74,8 @@ const StatusesList = () => {
     return (
       <>
         <div className="flex min-h-full items-center justify-center">
-          <div className="flex flex-1 flex-col items-center gap-y-6">
-            <h3 className="text-center text-lg font-medium">
+          <div className="flex flex-1 flex-col items-center gap-y-[25px]">
+            <h3 className="heading-l text-center">
               This board is empty. Create a new column to get started.
             </h3>
             <Button version="secondary" onClick={handleOpenBoardEdit}>
@@ -94,7 +95,7 @@ const StatusesList = () => {
     <>
       <ul className="flex min-h-full min-w-fit justify-start gap-x-4">
         <DndContext onDragEnd={handleDragEnd}>
-          {statuses.map(({ statusID, name }: IStatus) => {
+          {statuses.map(({ statusID, name, color }: IStatus) => {
             const taskCount = tasks.filter(
               (task: ITask) => task.statusID === statusID
             ).length;
@@ -106,15 +107,21 @@ const StatusesList = () => {
             return (
               <li className="flex w-[288px] flex-col" key={statusID}>
                 <div className="flex items-center gap-x-3 p-1">
-                  <div className="h-4 w-4 rounded-full bg-primaryPurple"></div>
-                  <h3 className="text-xs font-bold uppercase tracking-[2.4px]">
+                  <div
+                    style={{
+                      backgroundColor: color,
+                    }}
+                    className="h-[15px] w-[15px] rounded-full"
+                  ></div>
+                  <h3 className="heading-s uppercase">
                     {name} ({taskCount})
                   </h3>
                 </div>
                 {tasks && (
-                  <TaskList
+                  <TasksList
                     tasks={filteredTasks}
                     subtasks={subtasks}
+                    statusColor={color}
                     statusID={statusID}
                     onSetTaskID={setSelectedTaskID}
                     onOpenModal={handleOpenModal}

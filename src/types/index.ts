@@ -23,4 +23,5 @@ export interface ISubtask {
 export interface IStatus {
   statusID: string;
   name: string;
+  color: string;
 }

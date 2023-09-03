@@ -21,8 +21,8 @@ const Button: FC<ButtonProps> = ({
     className={`
     ${
       version === 'primary'
-        ? 'rounded-[20px] p-2 text-[13px] leading-[176.923%]'
-        : 'flex items-center rounded-3xl px-6 py-[14px] text-[15px] leading-normal'
+        ? 'rounded-[20px] p-2 text-[13px] font-bold leading-[176.923%]'
+        : 'heading-m flex items-center rounded-3xl px-6 py-[14px]'
     }
     ${
       color === 'purple'
@@ -30,9 +30,7 @@ const Button: FC<ButtonProps> = ({
         : color === 'lightPurple'
         ? 'bg-primaryLightPurple text-primaryPurple hover:bg-primaryLightPurpleHover dark:bg-primaryWhite'
         : 'bg-primaryRed text-primaryWhite hover:bg-primaryRedHover'
-    } font-bold outline-none duration-200 ${
-      disabled && 'opacity-50'
-    } ${className}`}
+    } outline-none duration-200 ${disabled && 'opacity-50'} ${className}`}
   >
     {children}
   </button>

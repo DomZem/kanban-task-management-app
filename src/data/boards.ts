@@ -8,14 +8,17 @@ export const initialState: IBoard[] = [
       {
         statusID: 'G23bpua3v4pWoM2zDXub4',
         name: 'Todo',
+        color: '#49C4E5',
       },
       {
         statusID: 'TMuO5vcZQTslhTX3E7jOG',
         name: 'Doing',
+        color: '#8471F2',
       },
       {
         statusID: 'adzbogxxY15UV-XOtv64E',
         name: 'Done',
+        color: '#67E2AE',
       },
     ],
     isActive: true,
@@ -27,10 +30,12 @@ export const initialState: IBoard[] = [
       {
         statusID: 'S6AL8VS_P7rshwFjbocDM',
         name: 'Todo',
+        color: '#49C4E5',
       },
       {
         statusID: 'jjreKmP-a-cm0thLGGqCs',
         name: 'Done',
+        color: '#8471F2',
       },
     ],
     isActive: false,
@@ -42,18 +47,17 @@ export const initialState: IBoard[] = [
       {
         statusID: 'L2uQLmEofMsbDuPwz-qBj',
         name: 'Inspiration',
+        color: '#49C4E5',
       },
       {
         statusID: 'cQQvpLAx5U8wXD6CeMCrD',
         name: 'Plan',
+        color: '#8471F2',
       },
       {
         statusID: 'kuL2t9uD5lVjY0Abqu3os',
         name: 'Work',
-      },
-      {
-        statusID: 'oY2bf_2vrUTtJHMCL0zaM',
-        name: 'Done',
+        color: '#67E2AE',
       },
     ],
     isActive: false,

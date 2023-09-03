@@ -10,9 +10,9 @@ import { boardDeleted, selectActiveBoard } from '@/store/slices/boardsSlice';
 import { useState } from 'react';
 import { MdAdd, MdKeyboardArrowDown } from 'react-icons/md';
 import { useMediaQuery } from 'usehooks-ts';
+import MobileSidebar from '../../templates/MobileSidebar/MobileSidebar';
 import BoardModal from '../BoardModal/BoardModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
-import MobileSidebar from '../MobileSidebar/MobileSidebar';
 import TaskModal from '../TaskModal/TaskModal';
 
 export type ModalType =
@@ -73,10 +73,10 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between border-primaryLinesLight bg-primaryWhite px-4 dark:border-primaryLinesDark dark:bg-primaryDarkGrey">
+      <header className="flex items-center justify-between border-primaryLinesLight bg-primaryWhite dark:border-primaryLinesDark dark:bg-primaryDarkGrey">
         <section className="flex h-full">
           {tabletMatches && (
-            <div className="flex h-full w-60 items-center border-r-[1px] border-primaryLinesLight dark:border-primaryLinesDark">
+            <div className="flex h-full w-sidebarTabletWidth items-center border-r-[1px] border-primaryLinesLight pl-headerTabletPadding dark:border-primaryLinesDark lg:w-sidebarDesktopWidth lg:pl-headerDesktopPadding">
               <img className="mr-4" src={logoImage} alt="logo" />
 
               <h1 className="text-2xl font-bold text-primaryBlack dark:text-primaryWhite">
@@ -84,10 +84,10 @@ const Header = () => {
               </h1>
             </div>
           )}
-          <div className="flex items-center">
+          <div className="flex items-center pl-headerMobilePadding md:pl-6">
             <img className="mr-4 md:hidden" src={logoImage} alt="logo" />
 
-            <h2 className="text-lg font-bold text-primaryBlack dark:text-primaryWhite md:ml-6 md:text-xl">
+            <h2 className="heading-l mr-1 text-primaryBlack dark:text-primaryWhite md:m-0">
               {board.name}
             </h2>
 
@@ -100,9 +100,13 @@ const Header = () => {
           </div>
         </section>
 
-        <section className="flex items-center gap-x-4">
+        <section className="flex items-center gap-x-4 pr-headerMobilePadding md:pr-headerTabletPadding lg:pr-headerDesktopPadding">
           {!tabletMatches ? (
-            <button className="rounded-3xl bg-primaryPurple px-4 py-2 duration-200 hover:bg-primaryPurpleHover">
+            <button
+              className={`rounded-3xl bg-primaryPurple px-3.5 py-1.5 duration-200 hover:bg-primaryPurpleHover `}
+              disabled={board.statuses.length === 0}
+              onClick={() => openModal('create-task')}
+            >
               <MdAdd className="text-xl text-primaryWhite" />
             </button>
           ) : (
@@ -120,9 +124,7 @@ const Header = () => {
         </section>
       </header>
       <Modal isOpen={isOpen} onCloseModal={handleCloseModal}>
-        {currentModal === 'mobile-sidebar' && (
-          <MobileSidebar onCurrentModalChange={setCurrentModal} />
-        )}
+        {currentModal === 'mobile-sidebar' && <MobileSidebar />}
         {currentModal === 'create-task' && (
           <TaskModal type="add" title="Add New Task" />
         )}
