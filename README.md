@@ -1,6 +1,6 @@
 <h1 align="center" id="title">Kanban task management app</h1>
 
-<p id="description">Manage your work and improve your organizational skills</p>
+<p align="center" id="description">Manage your work and improve your organizational skills</p>
 
 <h2>Project Screenshots:</h2>
 
