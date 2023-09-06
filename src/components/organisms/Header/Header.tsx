@@ -87,7 +87,7 @@ const Header = () => {
           <div className="flex items-center pl-headerMobilePadding md:pl-6">
             <img className="mr-4 md:hidden" src={logoImage} alt="logo" />
 
-            <h2 className="heading-l mr-1 text-primaryBlack dark:text-primaryWhite md:m-0">
+            <h2 className="heading-l lg:heading-xl mr-1 text-primaryBlack dark:text-primaryWhite md:m-0 md:text-xl md:leading-normal">
               {board.name}
             </h2>
 
